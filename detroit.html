@@ -14,7 +14,8 @@
     --shadow:0 8px 22px rgba(17,24,39,.06);
   }
   html.safe{--accent:var(--safe)} html.neutral{--accent:var(--neutral)}
-  *{box-sizing:border-box} body{margin:0;background:var(--page);color:var(--text);
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--page);color:var(--text);
     font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
 
   /* ===== Card ===== */
@@ -23,17 +24,32 @@
     background:var(--card); border:1px solid var(--line);
     border-radius:12px; overflow:hidden; box-shadow:var(--shadow); position:relative;
   }
-  .card::before{content:""; position:absolute; inset:0 auto 0 0; width:4px;
-    background:linear-gradient(180deg,var(--accent),var(--amber));}
+  .card::before{
+    content:""; position:absolute; inset:0 auto 0 0; width:4px;
+    background:linear-gradient(180deg,var(--accent),var(--amber));
+  }
 
-  /* ===== Hero ===== */
+  /* ===== Hero with “streetlight” treatment & centered image ===== */
   .hero{
+    position:relative; isolation:isolate;
     height:110px; border-bottom:1px solid var(--line);
     background:
-      linear-gradient(180deg, rgba(255,255,255,.0), rgba(255,255,255,.3)),
-      url("https://images.unsplash.com/photo-1477516561410-f0b5dd8319e4?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2064")
-      center/cover no-repeat;
+      url("https://images.unsplash.com/photo-1696943444991-def9485f89f8?ixlib=rb-4.1.0&auto=format&fit=crop&q=80&w=1740")
+      center center/cover no-repeat;
+    filter: hue-rotate(12deg) saturate(1.18) contrast(1.08) brightness(.88);
   }
+  .hero::after{
+    content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:
+      radial-gradient(90% 70% at 18% 0%, rgba(255,140,0,.50) 0%, rgba(255,140,0,.18) 55%, transparent 70%),
+      linear-gradient(180deg, rgba(255,160,40,.22) 0%, rgba(0,0,0,.30) 100%);
+    mix-blend-mode:multiply;
+  }
+  .hero::before{
+    content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
+    background:radial-gradient(120% 80% at 50% 10%, transparent 60%, rgba(0,0,0,.32) 100%);
+  }
+
   .credit{padding:4px 10px; font-size:10px; color:#8A94A3;
     border-bottom:1px solid var(--line); background:#fff}
   .credit a{color:#8A94A3; text-decoration:none; border-bottom:1px dotted #BAC2CF}
@@ -50,7 +66,7 @@
     background:linear-gradient(90deg,#2DCB84 0%, #FFB648 55%, #E23B2E 100%);
     border-radius:inherit; box-shadow:0 0 6px rgba(255,182,72,.35)}
   .score{font-size:24px; font-weight:900}
-  .score small{font-size:12px; color:var(--muted); font-weight:600}
+  .score small{font-size:12px; color:#6B7480; font-weight:600}
 
   /* ===== Metrics ===== */
   .labelM{font-size:9px; letter-spacing:.32px; text-transform:uppercase; color:#6B7480}
@@ -68,7 +84,7 @@
   .icon svg{width:18px; height:18px}
   .value{font-size:15px; font-weight:900; color:#1B2330; font-variant-numeric:tabular-nums}
 
-  /* per-metric color cue */
+  /* per‐metric color cue */
   .chip:nth-child(1) .icon{color:#E23B2E} /* violent */
   .chip:nth-child(2) .icon{color:#FFB648} /* property */
   .chip:nth-child(3) .icon{color:#FF7A12} /* offenders */
@@ -76,8 +92,8 @@
 </head>
 <body>
   <div class="card" role="group" aria-label="Trick-or-Treat risk card — Detroit, MI">
-    <div class="hero" role="img" aria-label="Detroit at night"></div>
-    <div class="credit">Source: <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a></div>
+    <div class="hero" role="img" aria-label="Detroit city night view centered"></div>
+    <div class="credit">Source: <a href="https://unsplash.com/photos/photo-1696943444991-def9485f89f8" target="_blank" rel="noopener">Unsplash</a></div>
 
     <div class="wrap">
       <h1 class="title">#2 Detroit, MI — Trick-or-Treat Risk</h1>
