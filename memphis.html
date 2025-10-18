@@ -14,7 +14,8 @@
     --shadow:0 8px 22px rgba(17,24,39,.06);
   }
   html.safe{--accent:var(--safe)} html.neutral{--accent:var(--neutral)}
-  *{box-sizing:border-box} body{margin:0;background:var(--page);color:var(--text);
+  *{box-sizing:border-box} 
+  body{margin:0;background:var(--page);color:var(--text);
     font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
 
   /* ===== Card ===== */
@@ -30,11 +31,11 @@
   .hero{
     height:110px; border-bottom:1px solid var(--line);
     background:
-      linear-gradient(180deg, rgba(255,255,255,.0), rgba(255,255,255,.3)),
-      /* Direct Unsplash hotlink by photo ID */
-      url("https://source.unsplash.com/OJy0JHnoUZQ/1600x900")
+      linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,0.3)),
+      url("https://images.unsplash.com/photo-1635432813464-32018ef9e01c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1548")
       center/cover no-repeat;
   }
+
   .credit{padding:4px 10px; font-size:10px; color:#8A94A3;
     border-bottom:1px solid var(--line); background:#fff}
   .credit a{color:#8A94A3; text-decoration:none; border-bottom:1px dotted #BAC2CF}
@@ -77,8 +78,8 @@
 </head>
 <body>
   <div class="card" role="group" aria-label="Trick-or-Treat risk card — Memphis, TN">
-    <div class="hero" role="img" aria-label="Masked figure at night"></div>
-    <div class="credit">Source: <a href="https://unsplash.com/photos/grayscale-photo-of-person-wearing-mask-OJy0JHnoUZQ" target="_blank" rel="noopener">Unsplash</a></div>
+    <div class="hero" role="img" aria-label="Downtown Memphis at dusk"></div>
+    <div class="credit">Source: <a href="https://unsplash.com/photos/photo-1635432813464-32018ef9e01c" target="_blank" rel="noopener">Unsplash</a></div>
 
     <div class="wrap">
       <h1 class="title">#1 Memphis, TN — Trick-or-Treat Risk</h1>
@@ -97,50 +98,37 @@
         <!-- Violent Crime -->
         <div class="chip" aria-label="Violent crime rate per 100,000">
           <div class="icon" aria-hidden="true">
-            <!-- Police badge -->
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 2 15 4l5 2-1 6-4 8-3 2-3-2-4-8-1-6 5-2z"/>
               <circle cx="12" cy="11" r="2"/>
             </svg>
           </div>
-          <div>
-            <div class="labelM">Violent Crime</div>
-            <div class="value">2,501 / 100k</div>
-          </div>
+          <div><div class="labelM">Violent Crime</div><div class="value">2,501 / 100k</div></div>
         </div>
 
         <!-- Property Crime -->
         <div class="chip" aria-label="Property crime rate per 100,000">
           <div class="icon" aria-hidden="true">
-            <!-- House -->
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 11l8-6 8 6v9a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1v-9z"/>
             </svg>
           </div>
-          <div>
-            <div class="labelM">Property Crime</div>
-            <div class="value">6,899 / 100k</div>
-          </div>
+          <div><div class="labelM">Property Crime</div><div class="value">6,899 / 100k</div></div>
         </div>
 
         <!-- Pedestrian Fatalities -->
         <div class="chip" aria-label="Pedestrian fatalities per 100,000">
           <div class="icon" aria-hidden="true">
-            <!-- Person profile (head + shoulders) -->
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="8" r="4"/>
               <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
             </svg>
           </div>
-          <div>
-            <div class="labelM">Pedestrian Fatalities</div>
-            <div class="value">8.97 / 100k</div>
-          </div>
+          <div><div class="labelM">Pedestrian Fatalities</div><div class="value">8.97 / 100k</div></div>
         </div>
       </div>
     </div>
   </div>
 </body>
 </html>
-
 
