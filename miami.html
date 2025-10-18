@@ -27,11 +27,12 @@
     background:linear-gradient(180deg,var(--accent),var(--amber));
   }
 
+  /* ===== Hero ===== */
   .hero{
     height:110px; border-bottom:1px solid var(--line);
     background:
       linear-gradient(180deg, rgba(255,255,255,.0), rgba(255,255,255,.3)),
-      url("https://images.unsplash.com/photo-1635725035995-cc2ac0697d20?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1588")
+      url("https://images.unsplash.com/photo-1595111571848-fdf33cfb6cff?ixlib=rb-4.1.0&auto=format&fit=crop&q=80&w=1742")
       center/cover no-repeat;
   }
 
@@ -45,6 +46,7 @@
   .title{font-weight:850; font-size:16px; margin:0 0 4px}
   .subtitle{font-size:12px; color:var(--muted); margin:0 0 6px}
 
+  /* ===== Score bar ===== */
   .scorebar{
     display:grid; grid-template-columns:auto 1fr auto; gap:8px;
     align-items:center; margin:0 0 10px;
@@ -60,8 +62,9 @@
     border-radius:inherit; box-shadow:0 0 6px rgba(255,182,72,.35);
   }
   .score{font-size:24px; font-weight:900}
-  .score small{font-size:12px; color:var(--muted); font-weight:600}
+  .score small{font-size:12px; color:#6B7480; font-weight:600}
 
+  /* ===== Metrics ===== */
   .labelM{font-size:9px; letter-spacing:.32px; text-transform:uppercase; color:#6B7480}
   .metrics{
     margin-top:6px; display:flex; gap:8px; flex-wrap:nowrap; overflow-x:auto;
@@ -85,6 +88,7 @@
   .icon svg{width:18px; height:18px}
   .value{font-size:15px; font-weight:900; color:#1B2330; font-variant-numeric:tabular-nums}
 
+  /* per-metric color cue for neutral card */
   .chip:nth-child(1) .icon{color:#E23B2E} /* violent */
   .chip:nth-child(2) .icon{color:#FFB648} /* property */
   .chip:nth-child(3) .icon{color:#2DCB84} /* pedestrian */
@@ -92,13 +96,14 @@
 </head>
 <body>
   <div class="card" role="group" aria-label="Trick-or-Treat risk card — Miami, FL">
-    <div class="hero" role="img" aria-label="Miami skyline at dusk"></div>
-    <div class="credit">Source: <a href="https://unsplash.com/photos/photo-1635725035995-cc2ac0697d20" target="_blank" rel="noopener">Unsplash</a></div>
+    <div class="hero" role="img" aria-label="Miami skyline at night"></div>
+    <div class="credit">Source: <a href="https://images.unsplash.com/photo-1595111571848-fdf33cfb6cff" target="_blank" rel="noopener">Unsplash</a></div>
 
     <div class="wrap">
       <h1 class="title">Miami, FL — Trick-or-Treat Risk</h1>
       <p class="subtitle">Final Risk Score</p>
 
+      <!-- Score bar -->
       <div class="scorebar">
         <div class="rank">Overall</div>
         <div class="bar" style="--p:35"><i></i></div>
@@ -111,6 +116,7 @@
         <!-- Violent Crime -->
         <div class="chip" aria-label="Violent crime rate per 100,000">
           <div class="icon" aria-hidden="true">
+            <!-- Police badge -->
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 2 15 4l5 2-1 6-4 8-3 2-3-2-4-8-1-6 5-2z"/>
               <circle cx="12" cy="11" r="2"/>
@@ -125,6 +131,7 @@
         <!-- Property Crime -->
         <div class="chip" aria-label="Property crime rate per 100,000">
           <div class="icon" aria-hidden="true">
+            <!-- House -->
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 11l8-6 8 6v9a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1v-9z"/>
             </svg>
@@ -138,6 +145,7 @@
         <!-- Pedestrian Fatalities -->
         <div class="chip" aria-label="Pedestrian fatalities per 100,000">
           <div class="icon" aria-hidden="true">
+            <!-- Person profile (head + shoulders) -->
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="8" r="4"/>
               <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
@@ -148,6 +156,7 @@
             <div class="value">5.1 / 100k</div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
