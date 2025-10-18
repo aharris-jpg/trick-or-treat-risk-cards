@@ -14,7 +14,8 @@
     --shadow:0 8px 22px rgba(17,24,39,.06);
   }
   html.safe{--accent:var(--safe)} html.neutral{--accent:var(--neutral)}
-  *{box-sizing:border-box} body{margin:0;background:var(--page);color:var(--text);
+  *{box-sizing:border-box} 
+  body{margin:0;background:var(--page);color:var(--text);
     font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
 
   /* ===== Card ===== */
@@ -31,9 +32,10 @@
     height:110px; border-bottom:1px solid var(--line);
     background:
       linear-gradient(180deg, rgba(255,255,255,.0), rgba(255,255,255,.3)),
-      url("https://images.unsplash.com/photo-1648316928147-cb1bb73dde4c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fA%3D%3D&auto=format&fit=crop&q=80&w=1740")
+      url("https://images.unsplash.com/photo-1414759030024-7889df4b20f4?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1812")
       center/cover no-repeat;
   }
+
   .credit{padding:4px 10px; font-size:10px; color:#8A94A3;
     border-bottom:1px solid var(--line); background:#fff}
   .credit a{color:#8A94A3; text-decoration:none; border-bottom:1px dotted #BAC2CF}
@@ -71,13 +73,13 @@
   /* per-metric color cue (Property / Violent / DUI) */
   .chip:nth-child(1) .icon{color:#FFB648} /* property */
   .chip:nth-child(2) .icon{color:#E23B2E} /* violent */
-  .chip:nth-child(3) .icon{color:#5B8CFF} /* dui */
+  .chip:nth-child(3) .icon{color:#5B8CFF} /* DUI */
 </style>
 </head>
 <body>
   <div class="card" role="group" aria-label="Trick-or-Treat risk card — Albuquerque, NM">
     <div class="hero" role="img" aria-label="Albuquerque at dusk"></div>
-    <div class="credit">Source: <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a></div>
+    <div class="credit">Source: <a href="https://unsplash.com/photos/silhouette-of-flock-of-birds-on-sky-Hz1WQbHcXag" target="_blank" rel="noopener">Unsplash</a></div>
 
     <div class="wrap">
       <h1 class="title">#3 Albuquerque, NM — Trick-or-Treat Risk</h1>
@@ -94,50 +96,35 @@
 
       <div class="metrics">
         <!-- Property Crime -->
-        <div class="chip" aria-label="Property crime rate per 100,000">
-          <div class="icon" aria-hidden="true">
-            <!-- House -->
+        <div class="chip">
+          <div class="icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 11l8-6 8 6v9a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1v-9z"/>
             </svg>
           </div>
-          <div>
-            <div class="labelM">Property Crime</div>
-            <div class="value">4,629 / 100k</div>
-          </div>
+          <div><div class="labelM">Property Crime</div><div class="value">4,629 / 100k</div></div>
         </div>
 
         <!-- Violent Crime -->
-        <div class="chip" aria-label="Violent crime rate per 100,000">
-          <div class="icon" aria-hidden="true">
-            <!-- Police badge -->
+        <div class="chip">
+          <div class="icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 2 15 4l5 2-1 6-4 8-3 2-3-2-4-8-1-6 5-2z"/>
               <circle cx="12" cy="11" r="2"/>
             </svg>
           </div>
-          <div>
-            <div class="labelM">Violent Crime</div>
-            <div class="value">1,182 / 100k</div>
-          </div>
+          <div><div class="labelM">Violent Crime</div><div class="value">1,182 / 100k</div></div>
         </div>
 
         <!-- DUI Rate -->
-        <div class="chip" aria-label="DUI rate per 1,000 drivers">
-          <div class="icon" aria-hidden="true">
-            <!-- Steering wheel -->
+        <div class="chip">
+          <div class="icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="9"/>
-              <circle cx="12" cy="12" r="2.2"/>
-              <path d="M12 3v6M3 12h6M21 12h-6M12 21v-6"/>
+              <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.2"/><path d="M12 3v6M3 12h6M21 12h-6M12 21v-6"/>
             </svg>
           </div>
-          <div>
-            <div class="labelM">DUI Rate</div>
-            <div class="value">2.35 / 1,000 drivers</div>
-          </div>
+          <div><div class="labelM">DUI Rate</div><div class="value">2.35 / 1,000 drivers</div></div>
         </div>
-
       </div>
     </div>
   </div>
