@@ -14,7 +14,7 @@
     --shadow:0 8px 22px rgba(17,24,39,.06);
   }
   html.safe{--accent:var(--safe)} html.neutral{--accent:var(--neutral)}
-  *{box-sizing:border-box} 
+  *{box-sizing:border-box}
   body{margin:0;background:var(--page);color:var(--text);
     font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
 
@@ -24,20 +24,36 @@
     background:var(--card); border:1px solid var(--line);
     border-radius:12px; overflow:hidden; box-shadow:var(--shadow); position:relative;
   }
-  .card::before{content:""; position:absolute; inset:0 auto 0 0; width:4px;
-    background:linear-gradient(180deg,var(--accent),var(--amber));}
-
-  /* ===== Hero ===== */
-  .hero{
-    height:110px; border-bottom:1px solid var(--line);
-    background:
-      linear-gradient(180deg, rgba(255,255,255,.0), rgba(255,255,255,.3)),
-      url("https://images.unsplash.com/photo-1414759030024-7889df4b20f4?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1812")
-      center/cover no-repeat;
+  .card::before{
+    content:""; position:absolute; inset:0 auto 0 0; width:4px;
+    background:linear-gradient(180deg,var(--accent),var(--amber));
   }
 
-  .credit{padding:4px 10px; font-size:10px; color:#8A94A3;
-    border-bottom:1px solid var(--line); background:#fff}
+  /* ===== Hero with warm night wash ===== */
+  .hero{
+    position:relative; isolation:isolate;
+    height:110px; border-bottom:1px solid var(--line);
+    background:
+      url("https://images.unsplash.com/photo-1520050984229-709501d9c1ff?ixlib=rb-4.1.0&auto=format&fit=crop&q=80&w=1738")
+      center center/cover no-repeat;
+    filter: hue-rotate(12deg) saturate(1.15) contrast(1.1) brightness(.9);
+  }
+  .hero::after{
+    content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:
+      radial-gradient(90% 70% at 20% 0%, rgba(255,140,0,.5) 0%, rgba(255,140,0,.18) 55%, transparent 70%),
+      linear-gradient(180deg, rgba(255,160,40,.22) 0%, rgba(0,0,0,.3) 100%);
+    mix-blend-mode:multiply;
+  }
+  .hero::before{
+    content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
+    background:radial-gradient(120% 80% at 50% 10%, transparent 60%, rgba(0,0,0,.32) 100%);
+  }
+
+  .credit{
+    padding:4px 10px; font-size:10px; color:#8A94A3;
+    border-bottom:1px solid var(--line); background:#fff;
+  }
   .credit a{color:#8A94A3; text-decoration:none; border-bottom:1px dotted #BAC2CF}
 
   .wrap{padding:12px}
@@ -45,18 +61,29 @@
   /* ===== Title + risk bar ===== */
   .title{font-weight:850; font-size:16px; margin:0 0 4px}
   .subtitle{font-size:12px; color:var(--muted); margin:0 0 6px}
-  .scorebar{display:grid; grid-template-columns:auto 1fr auto; gap:8px; align-items:center; margin:0 0 10px}
+  .scorebar{
+    display:grid; grid-template-columns:auto 1fr auto; gap:8px;
+    align-items:center; margin:0 0 10px;
+  }
   .rank{font-size:12px; color:var(--muted)}
-  .bar{height:8px; background:#EFF2F7; border:1px solid var(--line); border-radius:999px; position:relative; overflow:hidden}
-  .bar i{position:absolute; inset:0 auto 0 0; width:calc(var(--p,0)*1%);
+  .bar{
+    height:8px; background:#EFF2F7; border:1px solid var(--line);
+    border-radius:999px; position:relative; overflow:hidden;
+  }
+  .bar i{
+    position:absolute; inset:0 auto 0 0; width:calc(var(--p,0)*1%);
     background:linear-gradient(90deg,#2DCB84 0%, #FFB648 55%, #E23B2E 100%);
-    border-radius:inherit; box-shadow:0 0 6px rgba(255,182,72,.35)}
+    border-radius:inherit; box-shadow:0 0 6px rgba(255,182,72,.35);
+  }
   .score{font-size:24px; font-weight:900}
   .score small{font-size:12px; color:var(--muted); font-weight:600}
 
   /* ===== Metrics ===== */
   .labelM{font-size:9px; letter-spacing:.32px; text-transform:uppercase; color:#6B7480}
-  .metrics{margin-top:6px; display:flex; gap:8px; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:thin}
+  .metrics{
+    margin-top:6px; display:flex; gap:8px; flex-wrap:nowrap; overflow-x:auto;
+    -webkit-overflow-scrolling:touch; scrollbar-width:thin;
+  }
   .metrics::-webkit-scrollbar{height:6px}
   .metrics::-webkit-scrollbar-thumb{background:#D7DDE7; border-radius:999px}
 
@@ -78,14 +105,13 @@
 </head>
 <body>
   <div class="card" role="group" aria-label="Trick-or-Treat risk card — Albuquerque, NM">
-    <div class="hero" role="img" aria-label="Albuquerque at dusk"></div>
-    <div class="credit">Source: <a href="https://unsplash.com/photos/silhouette-of-flock-of-birds-on-sky-Hz1WQbHcXag" target="_blank" rel="noopener">Unsplash</a></div>
+    <div class="hero" role="img" aria-label="Albuquerque skyline at dusk with warm lighting"></div>
+    <div class="credit">Source: <a href="https://unsplash.com/photos/photo-1520050984229-709501d9c1ff" target="_blank" rel="noopener">Unsplash</a></div>
 
     <div class="wrap">
       <h1 class="title">#3 Albuquerque, NM — Trick-or-Treat Risk</h1>
       <p class="subtitle">Final Risk Score</p>
 
-      <!-- Compact risk bar -->
       <div class="scorebar">
         <div class="rank">Overall</div>
         <div class="bar" style="--p:47.5"><i></i></div>
