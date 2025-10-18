@@ -14,7 +14,8 @@
     --shadow:0 8px 22px rgba(17,24,39,.06);
   }
   html.safe{--accent:var(--safe)} html.neutral{--accent:var(--neutral)}
-  *{box-sizing:border-box} body{margin:0;background:var(--page);color:var(--text);
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--page);color:var(--text);
     font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
 
   /* ===== Card ===== */
@@ -23,19 +24,37 @@
     background:var(--card); border:1px solid var(--line);
     border-radius:12px; overflow:hidden; box-shadow:var(--shadow); position:relative;
   }
-  .card::before{content:""; position:absolute; inset:0 auto 0 0; width:4px;
-    background:linear-gradient(180deg,var(--accent),var(--amber));}
+  .card::before{
+    content:""; position:absolute; inset:0 auto 0 0; width:4px;
+    background:linear-gradient(180deg,var(--accent),var(--amber));
+  }
 
-  /* ===== Hero ===== */
+  /* ===== Hero (day → night conversion with filters) ===== */
   .hero{
+    position:relative; isolation:isolate;
     height:110px; border-bottom:1px solid var(--line);
     background:
-      linear-gradient(180deg, rgba(255,255,255,.0), rgba(255,255,255,.3)),
-      url("https://images.unsplash.com/photo-1700781892121-6df3b83a8f31?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1740")
-      center/cover no-repeat;
+      url("https://images.unsplash.com/photo-1578455451341-4abd1a00567e?ixlib=rb-4.1.0&auto=format&fit=crop&q=80&w=1932")
+      center center/cover no-repeat;
+    filter: brightness(0.58) saturate(1.05) contrast(1.15) hue-rotate(195deg);
   }
-  .credit{padding:4px 10px; font-size:10px; color:#8A94A3;
-    border-bottom:1px solid var(--line); background:#fff}
+  /* Warm streetlight + dusk shadow overlay */
+  .hero::after{
+    content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:
+      radial-gradient(90% 70% at 25% 90%, rgba(255,140,0,.4) 0%, rgba(255,140,0,.1) 45%, transparent 70%),
+      linear-gradient(180deg, rgba(0,0,0,.25) 0%, rgba(0,0,0,.55) 100%);
+    mix-blend-mode:multiply;
+  }
+  .hero::before{
+    content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
+    background:radial-gradient(120% 80% at 50% 10%, transparent 55%, rgba(0,0,0,.35) 100%);
+  }
+
+  .credit{
+    padding:4px 10px; font-size:10px; color:#8A94A3;
+    border-bottom:1px solid var(--line); background:#fff;
+  }
   .credit a{color:#8A94A3; text-decoration:none; border-bottom:1px dotted #BAC2CF}
 
   .wrap{padding:12px}
@@ -50,7 +69,7 @@
     background:linear-gradient(90deg,#2DCB84 0%, #FFB648 55%, #E23B2E 100%);
     border-radius:inherit; box-shadow:0 0 6px rgba(255,182,72,.35)}
   .score{font-size:24px; font-weight:900}
-  .score small{font-size:12px; color:var(--muted); font-weight:600}
+  .score small{font-size:12px; color:#6B7480; font-weight:600}
 
   /* ===== Metrics ===== */
   .labelM{font-size:9px; letter-spacing:.32px; text-transform:uppercase; color:#6B7480}
@@ -68,7 +87,7 @@
   .icon svg{width:18px; height:18px}
   .value{font-size:15px; font-weight:900; color:#1B2330; font-variant-numeric:tabular-nums}
 
-  /* per-metric color cue */
+  /* per-metric color cue (Pedestrian / Violent / Property) */
   .chip:nth-child(1) .icon{color:#2DCB84} /* pedestrian */
   .chip:nth-child(2) .icon{color:#E23B2E} /* violent */
   .chip:nth-child(3) .icon{color:#FFB648} /* property */
@@ -76,14 +95,13 @@
 </head>
 <body>
   <div class="card" role="group" aria-label="Trick-or-Treat risk card — Columbus, OH">
-    <div class="hero" role="img" aria-label="Columbus at night"></div>
-    <div class="credit">Source: <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a></div>
+    <div class="hero" role="img" aria-label="Columbus skyline darkened to nighttime look"></div>
+    <div class="credit">Source: <a href="https://unsplash.com/photos/photo-1578455451341-4abd1a00567e" target="_blank" rel="noopener">Unsplash</a></div>
 
     <div class="wrap">
       <h1 class="title">#4 Columbus, OH — Trick-or-Treat Risk</h1>
       <p class="subtitle">Final Risk Score</p>
 
-      <!-- Compact risk bar -->
       <div class="scorebar">
         <div class="rank">Overall</div>
         <div class="bar" style="--p:45.8"><i></i></div>
@@ -94,47 +112,35 @@
 
       <div class="metrics">
         <!-- Pedestrian Fatalities -->
-        <div class="chip" aria-label="Pedestrian fatalities per 100,000">
-          <div class="icon" aria-hidden="true">
-            <!-- Person walking -->
+        <div class="chip">
+          <div class="icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="4" r="2"/>
               <path d="M12 6l2 4 3 1-2 6M12 12l-3 6M8 20h8"/>
             </svg>
           </div>
-          <div>
-            <div class="labelM">Pedestrian Fatalities</div>
-            <div class="value">11.09 / 100k</div>
-          </div>
+          <div><div class="labelM">Pedestrian Fatalities</div><div class="value">11.09 / 100k</div></div>
         </div>
 
         <!-- Violent Crime -->
-        <div class="chip" aria-label="Violent crime rate per 100,000">
-          <div class="icon" aria-hidden="true">
-            <!-- Police badge -->
+        <div class="chip">
+          <div class="icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 2 15 4l5 2-1 6-4 8-3 2-3-2-4-8-1-6 5-2z"/>
               <circle cx="12" cy="11" r="2"/>
             </svg>
           </div>
-          <div>
-            <div class="labelM">Violent Crime</div>
-            <div class="value">604 / 100k</div>
-          </div>
+          <div><div class="labelM">Violent Crime</div><div class="value">604 / 100k</div></div>
         </div>
 
         <!-- Property Crime -->
-        <div class="chip" aria-label="Property crime rate per 100,000">
-          <div class="icon" aria-hidden="true">
-            <!-- House -->
+        <div class="chip">
+          <div class="icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 11l8-6 8 6v9a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1v-9z"/>
             </svg>
           </div>
-          <div>
-            <div class="labelM">Property Crime</div>
-            <div class="value">2,236 / 100k</div>
-          </div>
+          <div><div class="labelM">Property Crime</div><div class="value">2,236 / 100k</div></div>
         </div>
       </div>
     </div>
