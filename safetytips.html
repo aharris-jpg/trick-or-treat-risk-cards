@@ -1,0 +1,185 @@
+<!-- Trick-or-Treat Safety Tips (Drop-in, fully isolated) -->
+<div class="tt-tips-widget"></div>
+<script>
+(function(){
+  const host = document.currentScript.previousElementSibling;
+  if(!host || !host.classList.contains('tt-tips-widget')) return;
+
+  // Shadow DOM sandbox (prevents style/JS bleed)
+  const shadow = host.attachShadow({ mode:'open' });
+  const uid = 'tt'+Math.random().toString(36).slice(2,8);
+
+  // ====== DATA (edit copy here) ======
+  const TITLE = "Halloween Safety: 8 Quick Tips";
+  const SUB   = "Eight quick, shareable tips for a safer Halloween night.";
+  const SOURCE_URL  = "https://www.actionnetwork.com/news/halloween-trick-or-treat-risk-index-2025/";
+  const SOURCE_NAME = "Action Network";
+
+  // Keep copy concise (headline + 1 line)
+  const TIPS = [
+    { title:"Start early",       text:"Plan your route; finish by ~8 p.m.",               icon:"clock" },
+    { title:"Light up",          text:"Use reflective tape and clip-on lights.",         icon:"flash" },
+    { title:"Cross at corners",  text:"Use crosswalks—no mid-block.",                    icon:"crosswalk" },
+    { title:"Slow the streets",  text:"Drivers: keep neighborhood speeds < 20 mph.",     icon:"speed" },
+    { title:"Stick together",    text:"Young kids go with an adult or group.",           icon:"group" },
+    { title:"Mind the masks",    text:"Clear vision; hem long costumes.",                icon:"mask" },
+    { title:"Know your route",   text:"Choose well-lit streets; skip shortcuts.",        icon:"map" },
+    { title:"Phones down",       text:"Walk heads-up; save pics for porches.",           icon:"phone" },
+  ];
+
+  // ====== HTML + CSS ======
+  shadow.innerHTML = `
+  <section class="tips" role="region" aria-labelledby="title-${uid}">
+    <style>
+      :host{display:block;max-width:1000px;margin:0 auto}
+      .tips{
+        --bg:#ffffff; --surface:#ffffff; --ink:#1b2330; --muted:#6b7480; --border:#e6e9ee;
+        --header:#f8f9fb; --shadow:0 1px 2px rgba(0,0,0,.06), 0 10px 28px rgba(0,0,0,.06);
+        --radius:16px; --focus:#ff7a12;
+        /* Halloween accents */
+        --pumpkin:#e56b2e; --pumpkin-2:#f39b4f; --mint:#1a9e68;
+        background:linear-gradient(180deg,var(--header),var(--surface));
+        color:var(--ink); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px;
+      }
+      @media (prefers-color-scheme:dark){
+        .tips{ --bg:#0f1115; --surface:#0f1115; --ink:#e7ecef; --muted:#b3bdc6; --border:#2a2f37; --header:#151a21; --shadow:none; }
+      }
+      .topbar{height:4px; margin:-16px -16px 12px; background:
+        linear-gradient(90deg, transparent, var(--pumpkin), var(--mint), transparent);
+        border-top-left-radius:var(--radius); border-top-right-radius:var(--radius)}
+      .eyebrow{letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800;font-size:.8rem}
+      .title{margin:.25rem 0 .35rem;font-weight:850;line-height:1.15;font-size:clamp(1.4rem,2.6vw,2rem)}
+      .sub{margin:0 0 12px;color:var(--muted)}
+      .grid{
+        --col:minmax(clamp(240px,26vw,320px),1fr);
+        display:grid; gap:12px; grid-template-columns:repeat(auto-fit,var(--col));
+      }
+      .card{
+        display:grid; grid-template-columns:auto 1fr auto; align-items:start; gap:10px;
+        border:1px solid var(--border); background:var(--bg); border-radius:14px; padding:14px 12px; min-height:82px;
+        transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+      }
+      .card:hover{ transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.08);
+        border-color:color-mix(in srgb, var(--pumpkin) 28%, var(--border)); }
+      .num{ display:inline-flex; align-items:center; justify-content:center;
+        width:26px; height:26px; border-radius:999px; font:700 12px/1 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        color:#0b0d13; background:linear-gradient(180deg,#ffe3cf,#ffd1ad); border:1px solid #ffc59a; }
+      @media (prefers-color-scheme:dark){ .num{ color:#0b0d13; background:linear-gradient(180deg,rgba(255,168,120,.35),rgba(255,168,120,.2)); border-color:#6a4a2e } }
+      .h3{margin:0 0 2px;font-weight:800;font-size:1rem}
+      .text{margin:0;color:var(--muted);font-size:.95rem}
+      .icon{width:28px;height:28px;flex:0 0 28px;color:var(--pumpkin)}
+      .badge{align-self:start}
+      .source{margin:10px 2px 0;color:var(--muted);font-size:.85rem}
+      .source a{color:var(--pumpkin);font-weight:600;text-decoration:none;border-bottom:1px dotted currentColor}
+      .share{margin:14px 2px 2px;text-align:center;color:var(--muted);font-size:13px}
+      .share button{border:1px solid var(--border);background:none;padding:6px 10px;border-radius:8px;cursor:pointer}
+      .share button:hover{background:rgba(0,0,0,.03)}
+      @media (prefers-color-scheme:dark){ .share button:hover{background:rgba(255,255,255,.06)} }
+      textarea.embed{width:100%;height:180px;font-size:12px;border:1px solid var(--border);border-radius:8px;padding:8px;background:transparent;color:inherit}
+      a:focus-visible, button:focus-visible, .card:focus-visible{outline:3px solid var(--focus); outline-offset:2px; border-radius:10px}
+      @media (prefers-reduced-motion:reduce){ .card{transition:none} }
+    </style>
+
+    <div class="topbar" aria-hidden="true"></div>
+    <div class="eyebrow">Safety Checklist</div>
+    <h2 id="title-${uid}" class="title">${TITLE}</h2>
+    <p class="sub">${SUB}</p>
+
+    <div class="grid" role="list">
+      ${TIPS.map((t,i)=>`
+        <article class="card" role="listitem" aria-label="${t.title}">
+          <span class="num" aria-hidden="true">${i+1}</span>
+          <div>
+            <h3 class="h3">${t.title}</h3>
+            <p class="text">${t.text}</p>
+          </div>
+          <span class="badge" aria-hidden="true">${iconSVG(t.icon)}</span>
+        </article>
+      `).join('')}
+    </div>
+
+    <p class="source">
+      <em>About this study — The <span style="font-style:normal;">Trick-or-Treat Risk Index 2025</span> ranks the 50 largest U.S. cities using crime, traffic, and environmental data.</em><br>
+      Source: <a href="${SOURCE_URL}" target="_blank" rel="noopener">${SOURCE_NAME} — Read the full Trick-or-Treat Risk Index</a>
+    </p>
+
+    <div class="share" aria-live="polite">
+      <strong>Share or embed:</strong>
+      <button type="button" class="embed-toggle" aria-controls="embed-${uid}" aria-expanded="false">Get Embed Code</button>
+      <div id="embed-${uid}" hidden style="margin-top:8px;">
+        <textarea class="embed" readonly></textarea>
+      </div>
+    </div>
+  </section>
+  `;
+
+  // ====== Icons (inline, decorative) ======
+  function iconSVG(name){
+    const svg = {
+      clock:      '<svg class="icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6"/><path d="M12 7.5v5l3 1.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+      flash:      '<svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M10 2 4 13h6l-2 9 8-12h-6l2-8z" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>',
+      crosswalk:  '<svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M3 19h18" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="6" r="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 20v-6l2-2 4 2 2 6" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>',
+      speed:      '<svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M4 15a8 8 0 1 1 16 0" stroke="currentColor" stroke-width="1.6"/><path d="M12 12l5-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+      group:      '<svg class="icon" viewBox="0 0 24 24" fill="none"><circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="9" r="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M3 19c0-2.2 2.8-4 5-4s5 1.8 5 4" stroke="currentColor" stroke-width="1.6"/><path d="M14 19c0-1.6 1.7-2.9 3.5-2.9S21 17.4 21 19" stroke="currentColor" stroke-width="1.6"/></svg>',
+      mask:       '<svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M4 10c0-2 3.6-3.5 8-3.5s8 1.5 8 3.5v3c0 2-3.6 3.5-8 3.5S4 15 4 13v-3z" stroke="currentColor" stroke-width="1.6"/><path d="M8 11h3M13 11h3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+      map:        '<svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M3 7 9 4l6 3 6-3v13l-6 3-6-3-6 3V7z" stroke="currentColor" stroke-width="1.6"/><path d="M9 4v13M15 7v13" stroke="currentColor" stroke-width="1.6"/></svg>',
+      phone:      '<svg class="icon" viewBox="0 0 24 24" fill="none"><rect x="7" y="2.5" width="10" height="19" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M7 17h10" stroke="currentColor" stroke-width="1.6"/></svg>'
+    };
+    return svg[name] || svg.clock;
+  }
+
+  // ====== Embed generator (scriptless) ======
+  const embedWrap = shadow.getElementById(`embed-${uid}`);
+  const embedBtn  = shadow.querySelector('.embed-toggle');
+  const embedBox  = embedWrap.querySelector('textarea.embed');
+
+  if(embedBtn){
+    embedBtn.addEventListener('click', ()=>{
+      const hidden = embedWrap.hasAttribute('hidden');
+      if (hidden) embedWrap.removeAttribute('hidden'); else embedWrap.setAttribute('hidden','');
+      embedBtn.setAttribute('aria-expanded', String(hidden));
+    });
+
+    // Lightweight, scriptless embed with same layout and copy
+    const cards = TIPS.map((t,i)=>`
+      <article class="card" role="listitem">
+        <span class="num" aria-hidden="true">${i+1}</span>
+        <div>
+          <h3 class="h3">${t.title}</h3>
+          <p class="text">${t.text}</p>
+        </div>
+        <span class="badge" aria-hidden="true">${iconSVG(t.icon)}</span>
+      </article>`).join('');
+
+    embedBox.value = `<!-- BEGIN: Trick-or-Treat Safety Tips (Scriptless) -->
+<section class="tt-tips-embed" role="region" aria-labelledby="tt-tips-embed-title" style="max-width:1000px;margin:16px auto;font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#1b2330;background:linear-gradient(180deg,#f8f9fb,#fff);border:1px solid #e6e9ee;border-radius:16px;padding:16px">
+  <style>
+    .tt-tips-embed,.tt-tips-embed *{box-sizing:border-box}
+    .tt-tips-embed .top{height:4px;margin:-16px -16px 12px;background:linear-gradient(90deg,transparent,#e56b2e,#1a9e68,transparent);border-top-left-radius:16px;border-top-right-radius:16px}
+    .tt-tips-embed .eyebrow{letter-spacing:.08em;text-transform:uppercase;color:#6b7480;font-weight:800;font-size:.8rem}
+    .tt-tips-embed h2{margin:.25rem 0 .35rem;font-weight:850;line-height:1.15;font-size:clamp(1.4rem,2.6vw,2rem)}
+    .tt-tips-embed .sub{margin:0 0 12px;color:#6b7480}
+    .tt-tips-embed .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(clamp(240px,26vw,320px),1fr))}
+    .tt-tips-embed .card{display:grid;grid-template-columns:auto 1fr auto;align-items:start;gap:10px;border:1px solid #e6e9ee;background:#fff;border-radius:14px;padding:14px 12px;min-height:82px}
+    .tt-tips-embed .num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:999px;font:700 12px/1 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0b0d13;background:linear-gradient(180deg,#ffe3cf,#ffd1ad);border:1px solid #ffc59a}
+    .tt-tips-embed .h3{margin:0 0 2px;font-weight:800;font-size:1rem}
+    .tt-tips-embed .text{margin:0;color:#6b7480;font-size:.95rem}
+    .tt-tips-embed .icon{width:28px;height:28px;color:#e56b2e}
+  </style>
+  <div class="top" aria-hidden="true"></div>
+  <div class="eyebrow">Safety Checklist</div>
+  <h2 id="tt-tips-embed-title">${TITLE}</h2>
+  <p class="sub">${SUB}</p>
+  <div class="grid" role="list">
+    ${cards}
+  </div>
+  <p style="margin:10px 2px 0;color:#6b7480;font-size:.85rem">
+    Source: <a href="${SOURCE_URL}" target="_blank" rel="noopener" style="color:#e56b2e;text-decoration:none;border-bottom:1px dotted currentColor">${SOURCE_NAME} — Read the full Trick-or-Treat Risk Index</a>
+  </p>
+</section>
+<!-- END: Trick-or-Treat Safety Tips (Scriptless) -->`;
+  }
+})();
+</script>
+
+
