@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Trick-or-Treat Risk Index 2025 — Most Dangerous & Safest Cities</title>
+<meta name="description" content="Most dangerous and safest U.S. cities for Halloween night, with compact press-ready charts and one-click embeds." />
+<style>
+  :root{
+    --bg:#FFF9F4; --surface:#FFF; --ink:#1B2330; --muted:#6B7480; --border:#E6E9EE; --header:#FFF7F0;
+    --shadow:0 1px 2px rgba(0,0,0,.05),0 8px 22px rgba(17,24,39,.06);
+    --radius:12px; --accent:#E56B2E;
+    /* Pumpkin (risk) */
+    --p1:#D94C3A; --p2:#E05E35; --p3:#E86F31; --p4:#EF7F2F; --p5:#F48E33;
+    --p6:#F7A13F; --p7:#F9B252; --p8:#FBC56B; --p9:#FCD88A; --p10:#FDE9A9;
+    /* Mint (safe) */
+    --m1:#1A9E68; --m2:#26A66E; --m3:#33AE74; --m4:#46B980; --m5:#5CC291;
+    --m6:#76CCA4; --m7:#95D7BB; --m8:#B7E3D1; --m9:#D4EDE2; --m10:#E8F6EF;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --bg:#0F1115; --surface:#0F1115; --ink:#E7ECEF; --muted:#B3BDC6; --border:#2A2F37; --header:#151A21; --shadow:none; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.4 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
+  .wrap{max-width:960px;margin:22px auto;padding:0 14px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+  .head{padding:10px 12px;border-bottom:1px solid var(--border);background:var(--header);position:relative}
+  .head::before{content:"";display:block;height:3px;background:linear-gradient(90deg,#E05E35,#F7A13F,#E05E35);margin:-10px -12px 8px;border-top-left-radius:12px;border-top-right-radius:12px}
+  .h2{margin:0 0 2px;font-weight:850;font-size:clamp(16px,2.2vw,20px)}
+  .sub{margin:0;color:var(--muted);font-size:12px}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .seg{display:inline-flex;border:1px solid var(--border);border-radius:999px;overflow:hidden}
+  .seg input{position:absolute;opacity:0}
+  .seg label{padding:6px 10px;font-weight:700;color:var(--muted);cursor:pointer;user-select:none}
+  .seg input:checked + label{background:#FFE4CC;color:#1B2330}
+  .seg.safe input:checked + label{background:#D6F4E5}
+  .rows{padding:6px 8px}
+  .row{display:grid;grid-template-columns:28px 1fr minmax(220px,45%);gap:8px;align-items:center;margin:4px 0;padding:4px 8px;border:1px solid var(--border);border-radius:10px}
+  @media (max-width:640px){ .row{grid-template-columns:26px 1fr} .metric{grid-column:1 / -1} }
+  .rank{display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:800}
+  .city{font-weight:700}
+  .metric{position:relative;height:18px;border-radius:999px;background:#f0f2f6;overflow:hidden}
+  @media (prefers-color-scheme:dark){.metric{background:rgba(255,255,255,.08)}}
+  .bar{position:absolute;inset:0 auto 0 0;border-radius:999px}
+  .val{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-variant-numeric:tabular-nums;font-weight:900;font-size:12px;color:#111;text-shadow:0 1px 0 rgba(255,255,255,.85),0 0 4px rgba(255,255,255,.65)}
+  @media (prefers-color-scheme:dark){.val{color:#0F1115;background:rgba(255,255,255,.95);padding:0 6px;border-radius:999px;text-shadow:none}}
+  .foot{margin:8px 10px 12px;color:var(--muted);font-size:12px}
+  .foot a{color:#E56B2E;font-weight:600;text-decoration:none;border-bottom:1px dotted currentColor}
+  /* Embed panel */
+  .share{padding:10px 12px 14px;border-top:1px solid var(--border);background:var(--header)}
+  .share h3{margin:0 0 6px;font-size:14px}
+  .embed-toggle{appearance:none;border:1px solid var(--border);background:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;font-weight:700}
+  .embed-toggle:hover{background:#fffdfa}
+  @media (prefers-color-scheme:dark){.embed-toggle{background:#0f1115}}
+  .embed-panel[hidden]{display:none}
+  .embed-block{margin-top:10px}
+  .embed-block label{display:block;font-weight:700;margin:6px 0 4px}
+  .embed-block textarea{width:100%;height:140px;border:1px solid var(--border);border-radius:10px;padding:8px;background:transparent;color:inherit;font:12px/1.4 ui-monospace,Consolas,Monaco,monospace;resize:none}
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card" role="region" aria-labelledby="title">
+      <div class="head">
+        <h2 id="title" class="h2">Trick-or-Treat Risk Index 2025 — Most Dangerous Cities</h2>
+        <p id="subtitle" class="sub">Compact rankings with share-ready bars. Toggle between views.</p>
+
+        <div class="controls">
+          <div class="seg" role="tablist" aria-label="Select chart">
+            <input id="v-risk" type="radio" name="view" checked><label for="v-risk">Most Dangerous</label>
+            <input id="v-safe" type="radio" name="view"><label for="v-safe">Safest</label>
+            <input id="v-ped-hi" type="radio" name="view"><label for="v-ped-hi">Ped Deaths — High</label>
+            <input id="v-ped-lo" type="radio" name="view"><label for="v-ped-lo">Ped Deaths — Low</label>
+            <input id="v-viol" type="radio" name="view"><label for="v-viol">Violent Crime</label>
+            <input id="v-prop" type="radio" name="view"><label for="v-prop">Property Crime</label>
+          </div>
+        </div>
+      </div>
+
+      <div id="rows" class="rows" aria-live="polite"></div>
+
+      <div class="share">
+        <h3>Share / Embed</h3>
+        <button type="button" id="embedToggle" class="embed-toggle" aria-controls="embedPanel" aria-expanded="false">
+          Get Embed Code
+        </button>
+
+        <div id="embedPanel" class="embed-panel" hidden>
+          <small style="color:var(--muted)">Pick a tab above, then copy the embed you need.</small>
+          <div class="embed-block">
+            <label for="embed-iframe">Interactive (iframe)</label>
+            <textarea id="embed-iframe" readonly onclick="this.select()"></textarea>
+          </div>
+          <div class="embed-block">
+            <label for="embed-static">Static (scriptless, no JS)</label>
+            <textarea id="embed-static" readonly onclick="this.select()"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <p class="foot">
+        Source:
+        <a href="https://www.actionnetwork.com/news/halloween-trick-or-treat-risk-index-2025/" target="_blank" rel="noopener">
+          Action Network — Trick-or-Treat Risk Index 2025
+        </a>
+      </p>
+    </section>
+  </main>
+
+<script>
+/* Published URL of THIS page (used in iframe embed) */
+const CANONICAL_URL = "https://www.yoursite.com/halloween/trick-or-treat-press-chart.html";
+
+/* -------------------- DATA -------------------- */
+const RISKEST=[["Memphis","TN",62.33,2501.28,0.66,8.97],["Detroit","MI",61.23,1781.25,0.81,5.11],["Albuquerque","NM",47.48,1181.76,2.35,6.98],["Columbus","OH",45.80,603.80,2.35,11.09],["Kansas City","MO",45.32,1047.19,1.66,9.45],["Houston","TX",44.63,1148.17,1.02,3.63],["Oakland","CA",44.51,1925.33,2.76,2.41],["Colorado Springs","CO",43.92,715.60,2.63,1.79],["Minneapolis","MN",43.70,1160.22,3.30,1.42],["Milwaukee","WI",43.07,1430.90,2.39,2.59]];
+const SAFEST=[["Arlington","TX",10.52,482.94,1.03,1.50],["El Paso","TX",15.05,278.41,1.38,2.92],["Miami","FL",16.70,473.29,0.66,5.06],["New York","NY",17.99,671.02,2.73,0.66],["Las Vegas","NV",18.11,429.81,2.01,0.70],["Tampa","FL",18.94,444.64,1.17,4.65],["Boston","MA",19.19,627.87,1.50,1.14],["Washington","DC",21.92,925.88,1.56,1.68],["San Francisco","CA",22.84,596.50,2.59,1.68],["San Diego","CA",23.26,412.23,2.68,2.90]];
+const RAW_PEDS_HIGH=[["Columbus, OH",11.09],["Kansas City, MO",9.45],["Memphis, TN",8.97],["Tucson, AZ",7.16],["Albuquerque, NM",6.98],["Atlanta, GA",5.36],["Phoenix, AZ",5.22],["Detroit, MI",5.11],["Miami, FL",5.06],["Fresno, CA",4.81]];
+const RAW_PEDS_LOW=[["New York, NY",0.66],["Las Vegas, NV",0.70],["Virginia Beach, VA",0.99],["Boston, MA",1.14],["Omaha, NE",1.35],["Minneapolis, MN",1.42],["Arlington, TX",1.50],["Washington, DC",1.68],["San Francisco, CA",1.68],["Colorado Springs, CO",1.79]];
+const RAW_VIOLENT_HIGH=[["Memphis, TN",2501.28],["Oakland, CA",1925.33],["Detroit, MI",1781.25],["Baltimore, MD",1606.16],["Milwaukee, WI",1430.90],["Albuquerque, NM",1181.76],["Minneapolis, MN",1160.22],["Houston, TX",1148.17],["Nashville, TN",1124.06],["Kansas City, MO",1047.19]];
+const RAW_PROPERTY_HIGH=[["Oakland, CA",7230.34],["Memphis, TN",6898.98],["Portland, OR",5526.22],["Minneapolis, MN",5142.91],["Seattle, WA",5007.64],["Denver, CO",4761.57],["Albuquerque, NM",4628.77],["San Antonio, TX",4623.63],["Philadelphia, PA",4548.17],["Nashville, TN",4509.53]];
+
+/* -------------------- PALETTES -------------------- */
+const PUMPKIN=["var(--p1)","var(--p2)","var(--p3)","var(--p4)","var(--p5)","var(--p6)","var(--p7)","var(--p8)","var(--p9)","var(--p10)"];
+const MINT   =["var(--m1)","var(--m2)","var(--m3)","var(--m4)","var(--m5)","var(--m6)","var(--m7)","var(--m8)","var(--m9)","var(--m10)"];
+const HEX_PUMPKIN=["#D94C3A","#E05E35","#E86F31","#EF7F2F","#F48E33","#F7A13F","#F9B252","#FBC56B","#FCD88A","#FDE9A9"];
+const HEX_MINT   =["#1A9E68","#26A66E","#33AE74","#46B980","#5CC291","#76CCA4","#95D7BB","#B7E3D1","#D4EDE2","#E8F6EF"];
+
+/* -------------------- RENDER -------------------- */
+const rowsEl=document.getElementById('rows');
+const titleEl=document.getElementById('title');
+const subtitleEl=document.getElementById('subtitle');
+
+const VIEWS={
+  "v-risk":{labelTitle:"Trick-or-Treat Risk Index 2025 — Most Dangerous Cities",labelSub:"Highest overall Halloween risk (0–100). Higher score = longer bar.",palette:PUMPKIN,hex:HEX_PUMPKIN,dataset:()=>[...RISKEST].sort((a,b)=>b[2]-a[2]),val:d=>d[2],width:(d,max)=>d[2]/(max||1)*100,format:d=>d[2].toFixed(2).replace(/\.00$/,"")},
+  "v-safe":{labelTitle:"Trick-or-Treat Risk Index 2025 — Safest Cities",labelSub:"Lowest overall Halloween risk (0–100). Lower score = longer bar.",palette:MINT,hex:HEX_MINT,dataset:()=>[...SAFEST].sort((a,b)=>a[2]-b[2]),val:d=>d[2],width:(d,max,min)=>((max-d[2])/((max-min)||1))*100,format:d=>d[2].toFixed(2).replace(/\.00$/,"")},
+  "v-ped-hi":{labelTitle:"Highest Pedestrian Fatality Rates",labelSub:"Per 100,000 residents. Higher value = longer bar.",palette:PUMPKIN,hex:HEX_PUMPKIN,dataset:()=>[...RAW_PEDS_HIGH],val:d=>d[1],width:(d,max)=>d[1]/(max||1)*100,format:d=>d[1].toFixed(2).replace(/\.00$/,"")},
+  "v-ped-lo":{labelTitle:"Lowest Pedestrian Fatality Rates",labelSub:"Per 100,000 residents. Lower value = longer bar.",palette:MINT,hex:HEX_MINT,dataset:()=>[...RAW_PEDS_LOW],val:d=>d[1],width:(d,max,min)=>((max-d[1])/((max-min)||1))*100,format:d=>d[1].toFixed(2).replace(/\.00$/,"")},
+  "v-viol":{labelTitle:"Highest Violent Crime Rates",labelSub:"Incidents per 100,000 residents. Higher value = longer bar.",palette:PUMPKIN,hex:HEX_PUMPKIN,dataset:()=>[...RAW_VIOLENT_HIGH],val:d=>d[1],width:(d,max)=>d[1]/(max||1)*100,format:d=>d[1].toFixed(0)},
+  "v-prop":{labelTitle:"Highest Property Crime Rates",labelSub:"Incidents per 100,000 residents. Higher value = longer bar.",palette:PUMPKIN,hex:HEX_PUMPKIN,dataset:()=>[...RAW_PROPERTY_HIGH],val:d=>d[1],width:(d,max)=>d[1]/(max||1)*100,format:d=>d[1].toFixed(0)}
+};
+
+function currentKey(){const el=document.querySelector('input[name="view"]:checked');return el?el.id:"v-risk";}
+
+function render(){
+  const key=currentKey(),cfg=VIEWS[key];
+  titleEl.textContent=cfg.labelTitle;
+  subtitleEl.textContent=cfg.labelSub;
+  const data=cfg.dataset();
+  const vals=data.map(cfg.val);
+  const max=Math.max(...vals),min=Math.min(...vals);
+  const colors=cfg.palette;
+
+  rowsEl.innerHTML=data.map((d,i)=>{
+    const w=cfg.width(d,max,min);
+    const color=colors[i]||colors[colors.length-1];
+    const city=(key==='v-risk'||key==='v-safe')?`${d[0]}, ${d[1]}`:d[0];
+    return `<article class="row" aria-label="${city} — ${cfg.format(d)}">
+      <div class="rank">${i+1}</div>
+      <div class="city">${city}</div>
+      <div class="metric" aria-hidden="true">
+        <span class="bar" style="width:${(w||0).toFixed(2)}%;background:${color}"></span>
+        <span class="val">${cfg.format(d)}</span>
+      </div>
+    </article>`;
+  }).join("");
+
+  fillEmbeds(key,data,max,min,cfg);
+}
+
+/* -------------------- EMBEDS -------------------- */
+const taIframe=document.getElementById('embed-iframe');
+const taStatic=document.getElementById('embed-static');
+
+function fillEmbeds(key,data,max,min,cfg){
+  if(taIframe){
+    taIframe.value =
+`<!-- BEGIN: Action Network — Trick-or-Treat Risk (Interactive) -->
+<div style="max-width:960px;margin:16px auto;">
+  <iframe src="${CANONICAL_URL}#${key}" width="100%" height="560" loading="lazy"
+          style="border:1px solid #E6E9EE;border-radius:12px;background:#fff"
+          title="Trick-or-Treat Risk Index 2025 — ${cfg.labelTitle}"></iframe>
+  <p style="text-align:right;font-size:12px;color:#6B7480;margin-top:6px">
+    Source: <a href="https://www.actionnetwork.com/news/halloween-trick-or-treat-risk-index-2025/" target="_blank" rel="noopener">Action Network</a>
+  </p>
+</div>
+<!-- END: Interactive -->`;
+  }
+
+  if(taStatic){
+    const hex=cfg.hex, isIndex=(key==='v-risk'||key==='v-safe');
+    const pct=(d)=>{
+      if(key==='v-risk') return d[2]/(max||1)*100;
+      if(key==='v-safe') return ((max-d[2])/((max-min)||1))*100;
+      if(key==='v-ped-lo') return ((max-d[1])/((max-min)||1))*100;
+      return (isIndex?d[2]:d[1])/(max||1)*100;
+    };
+    const city=d=>isIndex?`${d[0]}, ${d[1]}`:d[0];
+    const val=d=>cfg.format(d);
+
+    const rowsHTML=data.map((d,i)=>`
+      <div style="display:grid;grid-template-columns:28px 1fr minmax(220px,45%);gap:8px;align-items:center;margin:4px 0;padding:4px 8px;border:1px solid #E6E9EE;border-radius:10px">
+        <div style="display:flex;align-items:center;justify-content:center;color:#6B7480;font-weight:800">${i+1}</div>
+        <div style="font-weight:700">${city(d)}</div>
+        <div style="position:relative;height:18px;border-radius:999px;background:#f0f2f6;overflow:hidden">
+          <span style="position:absolute;inset:0 auto 0 0;border-radius:999px;width:${pct(d).toFixed(2)}%;background:${hex[i]||hex[hex.length-1]}"></span>
+          <span style="position:absolute;right:6px;top:50%;transform:translateY(-50%);font:900 12px/1 Inter,system-ui,Segoe UI,Roboto,Arial;color:#111;text-shadow:0 1px 0 rgba(255,255,255,.85),0 0 4px rgba(255,255,255,.65)">${val(d)}</span>
+        </div>
+      </div>
+    `).join("");
+
+    taStatic.value =
+`<!-- BEGIN: Trick-or-Treat Risk — ${cfg.labelTitle} (Static, Scriptless) -->
+<section role="region" aria-labelledby="tt-static-title" style="max-width:960px;margin:16px auto;color:#1B2330;background:#FFF;border:1px solid #E6E9EE;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,.05),0 8px 22px rgba(17,24,39,.06);overflow:hidden;font:14px/1.4 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif">
+  <div style="padding:10px 12px;border-bottom:1px solid #E6E9EE;background:#FFF7F0">
+    <h3 id="tt-static-title" style="margin:0 0 2px;font-size:18px;line-height:1.2;font-weight:850">${cfg.labelTitle}</h3>
+    <p style="margin:0;color:#6B7480;font-size:12px">${cfg.labelSub}</p>
+  </div>
+  <div style="padding:6px 8px">
+${rowsHTML}
+  </div>
+  <p style="margin:8px 10px 12px;color:#6B7480;font-size:12px">
+    Source: <a href="https://www.actionnetwork.com/news/halloween-trick-or-treat-risk-index-2025/" target="_blank" rel="noopener" style="color:#E56B2E;text-decoration:none;border-bottom:1px dotted currentColor">Action Network — Trick-or-Treat Risk Index 2025</a>
+  </p>
+</section>
+<!-- END: Static -->`;
+  }
+}
+
+/* -------------------- INIT & LISTENERS -------------------- */
+function setFromHash(){
+  const id=(location.hash||"").replace("#","");
+  const opt=document.getElementById(id);
+  if(opt && opt.name==="view"){ opt.checked=true; }
+}
+setFromHash();
+render();
+
+/* robust tab switching */
+function onToggle(e){
+  const t=e.target;
+  if(t && t.name==="view"){
+    if(location.hash!==`#${t.id}`){ location.hash=`#${t.id}`; }
+    render();
+  }
+}
+document.addEventListener('change', onToggle, true);
+document.addEventListener('click', onToggle, true);
+window.addEventListener('hashchange', ()=>{ setFromHash(); render(); });
+
+/* embed show/hide */
+const embedBtn=document.getElementById('embedToggle');
+const embedPanel=document.getElementById('embedPanel');
+embedBtn.addEventListener('click', ()=>{
+  const hidden=embedPanel.hasAttribute('hidden');
+  if(hidden){ embedPanel.removeAttribute('hidden'); embedBtn.setAttribute('aria-expanded','true'); embedBtn.textContent='Hide Embed Code'; }
+  else{ embedPanel.setAttribute('hidden',''); embedBtn.setAttribute('aria-expanded','false'); embedBtn.textContent='Get Embed Code'; }
+});
+</script>
+</body>
+</html>
+
+
