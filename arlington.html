@@ -40,11 +40,10 @@
 
   /* ===== Title + badges ===== */
   .title{margin:0 0 2px;font-weight:850;font-size:16px}
-  .sub{margin:0 0 10px;color:var(--muted);font-size:12px}
+  .sub{margin:0 0 10px;color:#6B7480;font-size:12px}
   .badges{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
   .badge{font-size:11px;font-weight:800;color:#0F1115;background:#F4F6FA;border:1px solid var(--line);border-radius:999px;padding:4px 8px}
   .badge.accent{background:#E7FFF4;border-color:#C8F5E1;color:#0E3B29}
-  .badge.safe{background:#E7FFF4;border-color:#C8F5E1;color:#0E3B29}
 
   /* ===== Risk bar ===== */
   .grid{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;margin:6px 0 2px}
@@ -55,7 +54,7 @@
   .num{font-size:22px;font-weight:900}
   .num small{font-size:11px;color:#6B7480;font-weight:700}
 
-  .note{margin:2px 0 10px;color:var(--muted);font-size:11px}
+  .note{margin:2px 0 10px;color:#6B7480;font-size:11px}
 
   /* ===== Metric chips ===== */
   .labelM{font-size:10px;letter-spacing:.28px;text-transform:uppercase;color:#6B7480;margin-bottom:6px}
@@ -87,15 +86,8 @@ const CITY = {
   heroSrc: "https://images.unsplash.com/photo-1628630470617-01127f28a1f6?auto=format&fit=crop&q=80&w=1738"
 };
 
-/* ========== Helpers: score → % + odds tooltip ========== */
+/* ===== Helpers: score → implied %; band; simple odds ===== */
 const scoreToRiskPct = s => Math.round(Math.max(0, Math.min(100, s * 0.7))); // Index 50 ≈ 35%
-const pctToMoneyline = pct => {
-  const p=pct/100; if(p<=0||p>=1) return "—";
-  return p>=0.5 ? (-Math.round((p/(1-p))*100)).toString() : `+${Math.round(((1-p)/p)*100)}`;
-};
-const pctToDecimal = pct => { const p=pct/100; return p<=0? "—" : (1/p).toFixed(2); };
-
-// Descriptor & theme by risk band
 function riskBand(p){
   if(p >= 45) return {txt:"Very High", theme:"theme-danger"};
   if(p >= 38) return {txt:"High", theme:"theme-elevated"};
@@ -103,13 +95,12 @@ function riskBand(p){
   return {txt:"Low", theme:"theme-low"};
 }
 
-/* ================== Render ================== */
-const riskPct = scoreToRiskPct(CITY.indexScore);     // ≈ 7% for Arlington
-const safetyPct = Math.max(0, 100 - riskPct);        // ≈ 93%
-const band = riskBand(riskPct);                      // Low
-const moneyline = pctToMoneyline(riskPct);
-const decimal = pctToDecimal(riskPct);
+/* ===== Compute ===== */
+const riskPct = scoreToRiskPct(CITY.indexScore);      // ≈ 7% for Arlington
+const band = riskBand(riskPct);                        // Low
+const oddsOneIn = Math.max(2, Math.round(100 / Math.max(1, riskPct))); // ≈ 1 in 14
 
+/* ===== Render ===== */
 const el = document.getElementById("app");
 el.innerHTML = `
   <article class="card ${band.theme}" role="group" aria-label="Trick-or-Treat risk card — ${CITY.name}, ${CITY.state}">
@@ -118,26 +109,26 @@ el.innerHTML = `
 
     <div class="wrap">
       <h1 class="title">#${CITY.rankSafe} Safest — ${CITY.name}, ${CITY.state}</h1>
-      <p class="sub">Each city’s Index score is converted into an <strong>implied Halloween risk (%)</strong>. The typical U.S. city sits around <strong>35%</strong>.</p>
+      <p class="sub">Each city’s Index score is converted into an <strong>implied Halloween risk (%)</strong>. A typical U.S. city is around <strong>35%</strong>.</p>
 
       <div class="badges">
         <span class="badge accent">${band.txt} Risk</span>
         <span class="badge">Implied Risk: ${riskPct}%</span>
-        <span class="badge safe">Safety: ${safetyPct}%</span>
+        <span class="badge">≈ 1 in ${oddsOneIn} chance of an incident</span>
       </div>
 
-      <div class="grid" title="Implied odds • Moneyline: ${moneyline} • Decimal: ${decimal}">
+      <div class="grid" title="Implied probability of Halloween incidents">
         <div class="labelL">Implied Risk (%)</div>
         <div class="bar" style="--w:${Math.max(riskPct, parseInt(getComputedStyle(document.documentElement).getPropertyValue('--minbar')))}%">
           <i></i>
         </div>
         <div class="num">${riskPct}<small>%</small></div>
       </div>
-      <p class="note">Bars show the <em>actual implied percent</em>. Short bars include a small visual floor for visibility.</p>
+      <p class="note">Bars show the actual implied percent (with a small visual floor so short bars remain visible).</p>
 
       <div class="labelM">Key Metrics (raw values)</div>
       <div class="metrics" role="list">
-        <div class="chip" role="listitem" aria-label="Violent crime rate">
+        <div class="chip" role="listitem" aria-label="Violent crime rate per 100,000">
           <div class="icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 2 15 4l5 2-1 6-4 8-3 2-3-2-4-8-1-6 5-2z"/><circle cx="12" cy="11" r="2"/>
@@ -149,7 +140,7 @@ el.innerHTML = `
           </div>
         </div>
 
-        <div class="chip" role="listitem" aria-label="Property crime rate">
+        <div class="chip" role="listitem" aria-label="Property crime rate per 100,000">
           <div class="icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 11l8-6 8 6v9a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1v-9z"/>
@@ -161,7 +152,7 @@ el.innerHTML = `
           </div>
         </div>
 
-        <div class="chip" role="listitem" aria-label="Pedestrian fatalities">
+        <div class="chip" role="listitem" aria-label="Pedestrian fatalities per 100,000">
           <div class="icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M14 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
@@ -174,7 +165,7 @@ el.innerHTML = `
           </div>
         </div>
 
-        <div class="chip" role="listitem" aria-label="DUI rate">
+        <div class="chip" role="listitem" aria-label="DUI rate per 1,000 drivers">
           <div class="icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.2"/><path d="M12 3v6M3 12h6M21 12h-6M12 21v-6"/>
@@ -182,7 +173,7 @@ el.innerHTML = `
           </div>
           <div>
             <div class="k">DUI Rate</div>
-            <div class="v">${CITY.duiPer1kDrivers.toFixed(2)} / 1,000 drivers</div>
+            <div class="v">${CITY.duiPer1kDrivers.toFixed(2)} / 1,000</div>
           </div>
         </div>
       </div>
