@@ -117,22 +117,22 @@ el.innerHTML = `
 
     <div class="wrap">
       <h1 class="title">#${CITY.rank} ${CITY.name}, ${CITY.state} — Trick-or-Treat Risk</h1>
-      <p class="sub">We convert the city’s Index score into a <strong>Halloween Risk Level (%)</strong>. Typical U.S. city ≈ <strong>35%</strong>.</p>
+      <p class="sub">Each city’s Index score is converted into an <strong>implied Halloween risk (%)</strong>. The typical U.S. city sits around <strong>35%</strong>.</p>
 
       <div class="badges">
         <span class="badge accent">${band.txt} Risk</span>
-        <span class="badge">Risk: ${riskPct}%</span>
+        <span class="badge">Implied Risk: ${riskPct}%</span>
         <span class="badge safe">Safety: ${safetyPct}%</span>
       </div>
 
       <div class="grid" title="Implied odds • Moneyline: ${moneyline} • Decimal: ${decimal}">
-        <div class="labelL">Risk %</div>
+        <div class="labelL">Implied Risk (%)</div>
         <div class="bar" style="--w:${Math.max(riskPct, parseInt(getComputedStyle(document.documentElement).getPropertyValue('--minbar')))}%">
           <i></i>
         </div>
         <div class="num">${riskPct}<small>%</small></div>
       </div>
-      <p class="note">Bars show the <em>actual percent</em> (with a small visual floor so every bar is visible).</p>
+      <p class="note">Bars show the <em>actual implied percent</em>. Short bars include a small visual floor for visibility.</p>
 
       <div class="labelM">Key Metrics (raw values)</div>
       <div class="metrics" role="list">
