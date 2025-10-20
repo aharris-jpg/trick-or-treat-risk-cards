@@ -46,7 +46,6 @@
   .badges{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
   .badge{font-size:11px;font-weight:800;color:#0F1115;background:#F4F6FA;border:1px solid var(--line);border-radius:999px;padding:4px 8px}
   .badge.accent{background:#FFF1D8;border-color:#FFE4BA;color:#4A2E00} /* moderate = amber tint */
-  .badge.safe{background:#E7FFF4;border-color:#C8F5E1;color:#0E3B29}
 
   /* ===== Risk bar ===== */
   .grid{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;margin:6px 0 2px}
@@ -88,11 +87,8 @@ const CITY = {
   heroSrc: "https://images.unsplash.com/photo-1578455451341-4abd1a00567e?auto=format&fit=crop&q=80&w=1932"
 };
 
-/* ===== Helpers: score → %; odds; bands ===== */
+/* ===== Helpers: score → implied %; band; simple odds ===== */
 const scoreToRiskPct = s => Math.round(Math.max(0, Math.min(100, s * 0.7))); // Index 50 ≈ 35%
-const pctToMoneyline = pct => { const p=pct/100; if(p<=0||p>=1) return "—"; return p>=0.5 ? (-Math.round((p/(1-p))*100)).toString() : `+${Math.round(((1-p)/p)*100)}`; };
-const pctToDecimal = pct => { const p=pct/100; return p<=0 ? "—" : (1/p).toFixed(2); };
-
 function riskBand(p){
   if(p >= 45) return {txt:"Very High", theme:"theme-danger"};
   if(p >= 38) return {txt:"High", theme:"theme-elevated"};
@@ -101,11 +97,9 @@ function riskBand(p){
 }
 
 /* ===== Compute ===== */
-const riskPct = scoreToRiskPct(CITY.indexScore);   // ≈ 32%
-const safetyPct = Math.max(0, 100 - riskPct);      // ≈ 68%
-const band = riskBand(riskPct);                    // Moderate
-const moneyline = pctToMoneyline(riskPct);
-const decimal = pctToDecimal(riskPct);
+const riskPct = scoreToRiskPct(CITY.indexScore);      // ≈ 32%
+const band = riskBand(riskPct);                        // Moderate
+const oddsOneIn = Math.max(2, Math.round(100 / Math.max(1, riskPct))); // ≈ 1 in 3
 
 /* ===== Render ===== */
 const app = document.getElementById("app");
@@ -116,22 +110,22 @@ app.innerHTML = `
 
     <div class="wrap">
       <h1 class="title">#${CITY.rankOverall} — ${CITY.name}, ${CITY.state} — Trick-or-Treat Risk</h1>
-      <p class="sub">Each city’s Index score is converted into an <strong>implied Halloween risk (%)</strong>. The typical U.S. city sits around <strong>35%</strong>.</p>
+      <p class="sub">Each city’s Index score is converted into an <strong>implied Halloween risk (%)</strong>. A typical U.S. city is around <strong>35%</strong>.</p>
 
       <div class="badges">
         <span class="badge accent">${band.txt} Risk</span>
         <span class="badge">Implied Risk: ${riskPct}%</span>
-        <span class="badge safe">Safety: ${ safetyPct }%</span>
+        <span class="badge">≈ 1 in ${oddsOneIn} chance of an incident</span>
       </div>
 
-      <div class="grid" title="Implied odds • Moneyline: ${moneyline} • Decimal: ${decimal}">
+      <div class="grid" title="Implied probability of Halloween incidents">
         <div class="labelL">Implied Risk (%)</div>
         <div class="bar" style="--w:${Math.max(riskPct, parseInt(getComputedStyle(document.documentElement).getPropertyValue('--minbar')))}%">
           <i></i>
         </div>
         <div class="num">${riskPct}<small>%</small></div>
       </div>
-      <p class="note">Bars show the <em>actual implied percent</em>. Short bars include a small visual floor for visibility.</p>
+      <p class="note">Bars show the actual implied percent (with a small visual floor so short bars remain visible).</p>
 
       <div class="labelM">Key Metrics (raw values)</div>
       <div class="metrics" role="list">
