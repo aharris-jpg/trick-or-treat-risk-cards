@@ -53,7 +53,7 @@
   .bar i{position:absolute;inset:0 auto 0 0;width:var(--w,0);min-width:var(--minbar);border-radius:inherit;
          background:linear-gradient(90deg,#2DCB84,#FFB648 55%,#E23B2E)}
   .num{font-size:22px;font-weight:900}
-  .num small{font-size:11px;color:var(--muted);font-weight:700}
+  .num small{font-size:11px;color:#6B7480;font-weight:700}
 
   .note{margin:2px 0 10px;color:var(--muted);font-size:11px}
 
@@ -64,9 +64,9 @@
   .chip{flex:0 0 170px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:flex;gap:8px;align-items:center}
   .icon{width:28px;height:28px;border-radius:50%;background:#F1F3F8;display:grid;place-items:center}
   .icon svg{width:18px;height:18px}
-  .chip .k{font-size:11px;color:var(--muted)}
+  .chip .k{font-size:11px;color:#6B7480}
   .chip .v{font-size:15px;font-weight:900}
-  .chip:nth-child(1) .icon{color:#E23B2E} /* Violent (low = good) */
+  .chip:nth-child(1) .icon{color:#E23B2E} /* Violent */
   .chip:nth-child(2) .icon{color:#FFB648} /* Property */
   .chip:nth-child(3) .icon{color:#9061F9} /* Ped */
   .chip:nth-child(4) .icon{color:#5B8CFF} /* DUI */
@@ -87,7 +87,7 @@ const CITY = {
   heroSrc: "https://images.unsplash.com/photo-1628630470617-01127f28a1f6?auto=format&fit=crop&q=80&w=1738"
 };
 
-/* ========== Helpers: score → % + labels, odds tooltip ========== */
+/* ========== Helpers: score → % + odds tooltip ========== */
 const scoreToRiskPct = s => Math.round(Math.max(0, Math.min(100, s * 0.7))); // Index 50 ≈ 35%
 const pctToMoneyline = pct => {
   const p=pct/100; if(p<=0||p>=1) return "—";
@@ -95,7 +95,7 @@ const pctToMoneyline = pct => {
 };
 const pctToDecimal = pct => { const p=pct/100; return p<=0? "—" : (1/p).toFixed(2); };
 
-// Descriptor & theme based on absolute risk %
+// Descriptor & theme by risk band
 function riskBand(p){
   if(p >= 45) return {txt:"Very High", theme:"theme-danger"};
   if(p >= 38) return {txt:"High", theme:"theme-elevated"};
@@ -118,22 +118,22 @@ el.innerHTML = `
 
     <div class="wrap">
       <h1 class="title">#${CITY.rankSafe} Safest — ${CITY.name}, ${CITY.state}</h1>
-      <p class="sub">We convert the city’s Index score into a <strong>Halloween Risk Level (%)</strong>. Typical U.S. city ≈ <strong>35%</strong>.</p>
+      <p class="sub">Each city’s Index score is converted into an <strong>implied Halloween risk (%)</strong>. The typical U.S. city sits around <strong>35%</strong>.</p>
 
       <div class="badges">
         <span class="badge accent">${band.txt} Risk</span>
-        <span class="badge">Risk: ${riskPct}%</span>
+        <span class="badge">Implied Risk: ${riskPct}%</span>
         <span class="badge safe">Safety: ${safetyPct}%</span>
       </div>
 
       <div class="grid" title="Implied odds • Moneyline: ${moneyline} • Decimal: ${decimal}">
-        <div class="labelL">Risk %</div>
+        <div class="labelL">Implied Risk (%)</div>
         <div class="bar" style="--w:${Math.max(riskPct, parseInt(getComputedStyle(document.documentElement).getPropertyValue('--minbar')))}%">
           <i></i>
         </div>
         <div class="num">${riskPct}<small>%</small></div>
       </div>
-      <p class="note">Bars show the <em>actual percent</em> (with a small visual floor so every bar is visible).</p>
+      <p class="note">Bars show the <em>actual implied percent</em>. Short bars include a small visual floor for visibility.</p>
 
       <div class="labelM">Key Metrics (raw values)</div>
       <div class="metrics" role="list">
@@ -195,4 +195,3 @@ document.documentElement.classList.add(band.theme);
 </script>
 </body>
 </html>
-
