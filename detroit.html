@@ -42,7 +42,7 @@
   .wrap{padding:12px}
 
   .title{margin:0 0 2px;font-weight:850;font-size:16px}
-  .sub{margin:0 0 10px;color:var(--muted);font-size:12px}
+  .sub{margin:0 0 10px;color:#6B7480;font-size:12px}
 
   .badges{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
   .badge{font-size:11px;font-weight:800;color:#0F1115;background:#F4F6FA;
@@ -51,7 +51,7 @@
 
   .grid{display:grid;grid-template-columns:auto 1fr auto;gap:8px;
     align-items:center;margin:6px 0 2px}
-  .labelL{font-size:12px;color:var(--muted)}
+  .labelL{font-size:12px;color:#6B7480}
   .bar{height:10px;background:#EFF2F7;border:1px solid var(--line);
     border-radius:999px;position:relative;overflow:hidden}
   .bar i{position:absolute;inset:0 auto 0 0;width:var(--w,0);
@@ -72,7 +72,7 @@
   .icon{width:28px;height:28px;border-radius:50%;background:#F1F3F8;
     display:grid;place-items:center}
   .icon svg{width:18px;height:18px}
-  .chip .k{font-size:11px;color:var(--muted)}
+  .chip .k{font-size:11px;color:#6B7480}
   .chip .v{font-size:15px;font-weight:900}
   .chip:nth-child(1) .icon{color:#E23B2E} /* Violent */
   .chip:nth-child(2) .icon{color:#FFB648} /* Property */
@@ -105,9 +105,11 @@ function riskBand(p){
 }
 
 /* ===== Compute ===== */
-const riskPct = scoreToRiskPct(CITY.indexScore);
+const riskPct = scoreToRiskPct(CITY.indexScore);   // ≈ 43%
 const band = riskBand(riskPct);
-const oddsRatio = Math.round((100 / riskPct)); // simplified odds, e.g. 1 in 3
+// Clear “1 in X chance” text (e.g., 43% -> 1 in 2.3). Round to 1 decimal under 10, whole number 10+.
+const oneIn = riskPct ? (100 / riskPct) : Infinity;
+const oneInText = oneIn >= 10 ? Math.round(oneIn).toString() : oneIn.toFixed(1);
 
 /* ===== Render ===== */
 const app = document.getElementById("app");
@@ -123,7 +125,7 @@ app.innerHTML = `
       <div class="badges">
         <span class="badge accent">${band.txt} Risk</span>
         <span class="badge">Implied Risk: ${riskPct}%</span>
-        <span class="badge">≈ 1 in ${oddsRatio} odds of an incident</span>
+        <span class="badge">≈ 1 in ${oneInText} chance of an incident</span>
       </div>
 
       <div class="grid" title="Implied probability of Halloween incidents">
@@ -133,7 +135,7 @@ app.innerHTML = `
         </div>
         <div class="num">${riskPct}<small>%</small></div>
       </div>
-      <p class="note">Bars show the <em>implied probability</em> of Halloween incidents (scaled for visibility).</p>
+      <p class="note">Bars show the <em>implied probability</em> of Halloween incidents (with a small visual floor so short bars stay visible).</p>
 
       <div class="labelM">Key Metrics (raw values)</div>
       <div class="metrics" role="list">
@@ -199,3 +201,4 @@ document.documentElement.classList.add(band.theme);
 </script>
 </body>
 </html>
+
