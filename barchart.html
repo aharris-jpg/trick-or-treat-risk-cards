@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Trick-or-Treat Risk Index 2025 — Most Dangerous & Safest Cities</title>
-<meta name="description" content="Most dangerous and safest U.S. cities for Halloween night, shown as Halloween Risk Level (%), plus press-ready embeds." />
+<title>Trick-or-Treat Risk Index 2025 — Implied Probability of Halloween Incidents</title>
+<meta name="description" content="Press-ready charts of the most dangerous and safest U.S. cities for Halloween night, expressed as implied probability of incidents (%), plus raw leaderboards for pedestrian deaths and crime." />
 <style>
   :root{
     --bg:#FFF9F4; --surface:#FFF; --ink:#1B2330; --muted:#6B7480; --border:#E6E9EE; --header:#FFF7F0;
@@ -61,9 +61,9 @@
   <main class="wrap">
     <section class="card" role="region" aria-labelledby="title">
       <div class="head">
-        <h2 id="title" class="h2">Halloween Risk Level (%) — Most Dangerous Cities</h2>
+        <h2 id="title" class="h2">Implied Probability of Halloween Incidents (%) — Most Dangerous Cities</h2>
         <p id="subtitle" class="sub">
-          Bars are scaled <em>within this list</em> using gentle (√) compression so ranks look even; labels show real values.
+          Bars are scaled <em>within this list</em> using gentle (√) compression for visual balance. Labels show the actual implied probabilities (typical city ≈ 35%).
         </p>
 
         <div class="controls">
@@ -128,9 +128,9 @@ const ANY_BAR_MIN_PCT = 8;    // floor so every row shows color
 const SCALE_MODE = "sqrt";    // "linear" or "sqrt" (gentle compression)
 
 /* -------------------- UTILS -------------------- */
-// Index → Risk %
+// Index → implied probability (%). Index 50 ≈ 35%.
 function scoreToRiskPct(score){
-  const pct = score * 0.7; // Index 50 ≈ 35%
+  const pct = score * 0.7;
   return Math.round(Math.max(0, Math.min(100, pct)));
 }
 const fmtPct = (pct)=> `${pct}%`;
@@ -141,7 +141,7 @@ function relWidth(value, min, max, {invert=false, mode=SCALE_MODE}={}){
   let t = (value - min) / (max - min);
   t = Math.max(0, Math.min(1, t));
   if (invert) t = 1 - t;
-  if (mode === "sqrt") t = Math.sqrt(t); // compress extremes so bars look even
+  if (mode === "sqrt") t = Math.sqrt(t);
   return Math.max(ANY_BAR_MIN_PCT, t * 100);
 }
 
@@ -165,20 +165,20 @@ const titleEl=document.getElementById('title');
 const subtitleEl=document.getElementById('subtitle');
 
 const VIEWS={
-  // Risk % (relative bars, show real % in label). Higher risk → longer bar.
+  // Implied probability (higher → more dangerous)
   "v-risk":{
-    labelTitle:"Halloween Risk Level (%) — Most Dangerous Cities",
-    labelSub:"Bars are relative within this list (√-scaled). Label shows actual Risk % (typical city ≈ 35%).",
+    labelTitle:"Implied Probability of Halloween Incidents (%) — Most Dangerous Cities",
+    labelSub:"Bars are relative within this list (√-scaled). Labels show actual implied probabilities (typical city ≈ 35%).",
     palette:PUMPKIN, hex:HEX_PUMPKIN,
     dataset:()=>[...RISKEST].sort((a,b)=>scoreToRiskPct(b[2]) - scoreToRiskPct(a[2])),
     val:d=>scoreToRiskPct(d[2]),
     width:(d,max,min)=>relWidth(scoreToRiskPct(d[2]), min, max, {invert:false}),
     format:d=>fmtPct(scoreToRiskPct(d[2]))
   },
-  // Risk % (relative bars, but inverted so lower risk → longer bar).
+  // Implied probability (lower → safer; invert bars)
   "v-safe":{
-    labelTitle:"Halloween Risk Level (%) — Safest Cities",
-    labelSub:"Bars are relative within this list (√-scaled). Lower Risk % gets a longer bar; label shows actual Risk %.",
+    labelTitle:"Implied Probability of Halloween Incidents (%) — Safest Cities (lower is better)",
+    labelSub:"Bars are relative within this list (√-scaled). Lower implied % gets a longer bar; labels show actual probabilities.",
     palette:MINT, hex:HEX_MINT,
     dataset:()=>[...SAFEST].sort((a,b)=>scoreToRiskPct(a[2]) - scoreToRiskPct(b[2])),
     val:d=>scoreToRiskPct(d[2]),
@@ -186,7 +186,7 @@ const VIEWS={
     format:d=>fmtPct(scoreToRiskPct(d[2]))
   },
 
-  // Raw metrics — relative within list, √-scaled, with floors
+  // Raw metrics — unchanged wording for clarity
   "v-ped-hi":{
     labelTitle:"Pedestrian Fatalities — Highest (per 100,000)",
     labelSub:"Per 100,000 residents. Bars are relative within this list (√-scaled).",
@@ -244,7 +244,7 @@ function render(){
     const pct = (key==='v-risk'||key==='v-safe') ? scoreToRiskPct(d[2]) : null;
 
     const titleTip = (pct!==null)
-      ? `${city} — ${pct}% • Moneyline: ${pctToMoneyline(pct)} • Decimal: ${pctToDecimal(pct)}`
+      ? `${city} — ${pct}% implied • Moneyline: ${pctToMoneyline(pct)} • Decimal: ${pctToDecimal(pct)}`
       : `${city} — ${cfg.format(d)}`;
 
     return `<article class="row" aria-label="${city}" title="${titleTip}">
@@ -267,7 +267,7 @@ const taStatic=document.getElementById('embed-static');
 function fillEmbeds(key,data,max,min,cfg){
   if(taIframe){
     taIframe.value =
-`<!-- BEGIN: Action Network — Halloween Risk (Interactive) -->
+`<!-- BEGIN: Action Network — Halloween Odds (Interactive) -->
 <div style="max-width:960px;margin:16px auto;">
   <iframe src="${CANONICAL_URL}#${key}" width="100%" height="560" loading="lazy"
           style="border:1px solid #E6E9EE;border-radius:12px;background:#fff"
