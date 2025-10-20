@@ -1,161 +1,201 @@
 <!doctype html>
-<html lang="en" class="safe"><!-- safe = green accent -->
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Las Vegas, NV — Trick-or-Treat Safety (Compact)</title>
 <style>
+  /* ===== Unified Compact Card Theme ===== */
   :root{
     --page:#F8F9FB; --card:#FFF; --panel:#FFF; --line:#E6E9EE;
-    --text:#1B2330; --muted:#6B7480;
-    --amber:#FFB648; --danger:#E23B2E; --safe:#2DCB84; --neutral:#FF7A12;
-    --accent:var(--safe); --icon-bg:#F1F3F8;
-    --shadow:0 8px 22px rgba(17,24,39,.06);
+    --ink:#1B2330; --muted:#6B7480;
+    --danger:#E23B2E; --warn:#FFB648; --safe:#2DCB84;
+    --neutral:#FF7A12; --shadow:0 8px 22px rgba(17,24,39,.06);
+    --minbar:8%;
   }
-  html.safe{--accent:var(--safe)} html.neutral{--accent:var(--neutral)} html.danger{--accent:var(--danger)}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--page);color:var(--text);
-    font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
+  html,body{margin:0;background:var(--page);color:var(--ink);
+    font:14px/1.45 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;}
+  .theme-safe{--accent:var(--safe)}
+  .theme-danger{--accent:var(--danger)}
+  .theme-neutral{--accent:var(--neutral)}
 
+  /* ===== Card ===== */
   .card{
-    width:100%; max-width:560px; margin:auto;
-    background:var(--card); border:1px solid var(--line);
-    border-radius:12px; overflow:hidden; box-shadow:var(--shadow); position:relative;
+    width:100%;max-width:560px;margin:16px auto;background:var(--card);
+    border:1px solid var(--line);border-radius:12px;overflow:hidden;
+    box-shadow:var(--shadow);position:relative;
   }
   .card::before{
-    content:""; position:absolute; inset:0 auto 0 0; width:4px;
-    background:linear-gradient(180deg,var(--accent),var(--amber));
+    content:"";position:absolute;inset:0 auto 0 0;width:4px;
+    background:linear-gradient(180deg,var(--accent),var(--warn));
   }
 
-  /* Hero */
-  .hero{
-    height:110px; border-bottom:1px solid var(--line);
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.35)),
-      url("https://images.unsplash.com/photo-1581351721010-8cf859cb14a4?ixlib=rb-4.1.0&auto=format&fit=crop&q=80&w=1740")
-      center/cover no-repeat;
+  /* ===== Hero ===== */
+  .hero{position:relative;height:110px;border-bottom:1px solid var(--line);
+    background:url("https://images.unsplash.com/photo-1581351721010-8cf859cb14a4?auto=format&fit=crop&q=80&w=1740")
+    center/cover no-repeat;
+    filter:hue-rotate(4deg) saturate(1.05) contrast(1.04) brightness(.96);}
+  .hero::after{
+    content:"";position:absolute;inset:0;background:
+      radial-gradient(90% 70% at 20% 0%, rgba(45,203,132,.35) 0%, rgba(45,203,132,.12) 55%, transparent 70%),
+      linear-gradient(180deg, rgba(255,160,40,.1), rgba(0,0,0,.25));
   }
-  .credit{
-    padding:4px 10px; font-size:10px; color:#8A94A3;
-    border-bottom:1px solid var(--line); background:#fff;
+  .hero::before{
+    content:"";position:absolute;inset:0;background:
+      radial-gradient(120% 80% at 50% 10%, transparent 60%, rgba(0,0,0,.22) 100%);
   }
-  .credit a{color:#8A94A3; text-decoration:none; border-bottom:1px dotted #BAC2CF}
 
-  .wrap{padding:12px}
-  .title{font-weight:850; font-size:16px; margin:0 0 4px}
-  .subtitle{font-size:12px; color:var(--muted); margin:0 0 6px}
+  .credit{padding:4px 10px;font-size:10px;color:#8A94A3;border-bottom:1px solid var(--line);background:#fff;}
+  .credit a{color:#8A94A3;text-decoration:none;border-bottom:1px dotted currentColor;}
 
-  /* Score bar */
-  .scorebar{
-    display:grid; grid-template-columns:auto 1fr auto; gap:8px;
-    align-items:center; margin:0 0 10px;
-  }
-  .rank{font-size:12px; color:var(--muted)}
-  .bar{
-    height:8px; background:#EFF2F7; border:1px solid var(--line);
-    border-radius:999px; position:relative; overflow:hidden;
-  }
-  .bar i{
-    position:absolute; inset:0 auto 0 0; width:calc(var(--p,0)*1%);
-    background:linear-gradient(90deg,#2DCB84 0%, #FFB648 55%, #E23B2E 100%);
-    border-radius:inherit; box-shadow:0 0 6px rgba(255,182,72,.35);
-  }
-  .score{font-size:24px; font-weight:900}
-  .score small{font-size:12px; color:#6B7480; font-weight:600}
+  .wrap{padding:12px;}
 
-  /* Metrics */
-  .labelM{font-size:9px; letter-spacing:.32px; text-transform:uppercase; color:#6B7480}
-  .metrics{
-    margin-top:6px; display:flex; gap:8px; flex-wrap:nowrap; overflow-x:auto;
-    -webkit-overflow-scrolling:touch; scrollbar-width:thin;
-  }
-  .metrics::-webkit-scrollbar{height:6px}
-  .metrics::-webkit-scrollbar-thumb{background:#D7DDE7; border-radius:999px}
+  /* ===== Title + bar ===== */
+  .title{margin:0 0 2px;font-weight:850;font-size:16px;}
+  .sub{margin:0 0 10px;color:var(--muted);font-size:12px;}
+  .badges{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px;}
+  .badge{font-size:11px;font-weight:800;color:#0F1115;background:#F4F6FA;
+    border:1px solid var(--line);border-radius:999px;padding:4px 8px;}
+  .badge.accent{background:#E7FFF4;border-color:#C8F5E1;color:#0E3B29;}
+  .badge.warn{background:#FFF9EE;border-color:#FDEBC7;color:#4C3201;}
+  .badge.danger{background:#FFF1F1;border-color:#FAD2D2;color:#3E0505;}
 
-  .chip{
-    flex:0 0 160px; background:var(--panel); border:1px solid var(--line);
-    border-radius:10px; padding:8px 10px; display:flex; align-items:center; gap:8px;
-    transition:transform .12s ease, box-shadow .15s ease;
-  }
-  .chip:hover .icon{
-    box-shadow:0 0 0 3px rgba(45,203,132,.2), 0 0 12px rgba(45,203,132,.25);
-  }
-  .icon{
-    width:28px; height:28px; border-radius:50%; background:var(--icon-bg);
-    display:grid; place-items:center;
-  }
-  .icon svg{width:18px; height:18px}
-  .value{font-size:15px; font-weight:900; color:#1B2330; font-variant-numeric:tabular-nums}
+  /* ===== Risk bar ===== */
+  .grid{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;margin:6px 0 4px;}
+  .labelL{font-size:12px;color:var(--muted);}
+  .bar{height:10px;background:#EFF2F7;border:1px solid var(--line);
+    border-radius:999px;position:relative;overflow:hidden;}
+  .bar i{position:absolute;inset:0 auto 0 0;width:var(--w,0);
+    min-width:var(--minbar);border-radius:inherit;
+    background:linear-gradient(90deg,#2DCB84 0%,#FFB648 55%,#E23B2E 100%);
+    box-shadow:0 0 6px rgba(255,182,72,.28);}
+  .num{font-size:22px;font-weight:900;}
+  .num small{font-size:11px;color:var(--muted);font-weight:700;}
+  .note{margin:2px 0 10px;color:var(--muted);font-size:11px;}
 
-  /* per-metric color cue */
-  .chip:nth-child(1) .icon{color:#2DCB84} /* violent */
-  .chip:nth-child(2) .icon{color:#FFB648} /* property */
-  .chip:nth-child(3) .icon{color:#E23B2E} /* pedestrian */
+  /* ===== Metric chips ===== */
+  .labelM{font-size:10px;letter-spacing:.28px;text-transform:uppercase;color:#6B7480;margin-bottom:6px;}
+  .metrics{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;}
+  .metrics::-webkit-scrollbar{height:6px;}
+  .metrics::-webkit-scrollbar-thumb{background:#D7DDE7;border-radius:999px;}
+  .chip{flex:0 0 170px;background:var(--panel);border:1px solid var(--line);
+    border-radius:10px;padding:8px 10px;display:flex;gap:8px;align-items:center;}
+  .icon{width:28px;height:28px;border-radius:50%;background:#F1F3F8;display:grid;place-items:center;}
+  .icon svg{width:18px;height:18px;}
+  .chip .k{font-size:11px;color:var(--muted);}
+  .chip .v{font-size:15px;font-weight:900;}
+  .chip:nth-child(1) .icon{color:#2DCB84;} /* Violent */
+  .chip:nth-child(2) .icon{color:#FFB648;} /* Property */
+  .chip:nth-child(3) .icon{color:#E23B2E;} /* Pedestrian */
 </style>
 </head>
 <body>
-  <div class="card" role="group" aria-label="Trick-or-Treat safety card — Las Vegas, NV">
-    <div class="hero" role="img" aria-label="Las Vegas suburbs at night"></div>
-    <div class="credit">Source: <a href="https://images.unsplash.com/photo-1581351721010-8cf859cb14a4" target="_blank" rel="noopener">Unsplash</a></div>
+  <div id="app"></div>
+
+<script>
+/* ================== INPUT (Las Vegas) ================== */
+const CITY = {
+  name: "Las Vegas", state: "NV", rankOverall: 5,
+  indexScore: 22.0,
+  violentPer100k: 430,
+  propertyPer100k: 2623,
+  pedDeathsPer100k: 0.7,
+  heroSrc: "https://images.unsplash.com/photo-1581351721010-8cf859cb14a4?auto=format&fit=crop&q=80&w=1740"
+};
+
+/* ===== Helpers ===== */
+const scoreToRiskPct = s => Math.round(Math.max(0, Math.min(100, s * 0.7))); // Index 50 ≈ 35%
+const pctToMoneyline = pct => { const p=pct/100; if(p<=0||p>=1)return"—"; return p>=0.5?(-Math.round((p/(1-p))*100)).toString():`+${Math.round(((1-p)/p)*100)}`; };
+const pctToDecimal = pct => { const p=pct/100; return p<=0?"—":(1/p).toFixed(2); };
+
+function riskBand(p){
+  if(p >= 45) return {txt:"Very High", theme:"theme-danger"};
+  if(p >= 38) return {txt:"High", theme:"theme-neutral"};
+  if(p >= 28) return {txt:"Moderate", theme:"theme-neutral"};
+  return {txt:"Low", theme:"theme-safe"};
+}
+
+/* ===== Compute ===== */
+const riskPct = scoreToRiskPct(CITY.indexScore);
+const safetyPct = Math.max(0, 100 - riskPct);
+const band = riskBand(riskPct);
+const moneyline = pctToMoneyline(riskPct);
+const decimal = pctToDecimal(riskPct);
+
+/* ===== Render ===== */
+const app = document.getElementById("app");
+app.innerHTML = `
+  <article class="card ${band.theme}" role="group" aria-label="Trick-or-Treat safety card — ${CITY.name}, ${CITY.state}">
+    <div class="hero" role="img" aria-label="${CITY.name} suburbs at night" style="background-image:url('${CITY.heroSrc}')"></div>
+    <div class="credit">Photo: <a href="${CITY.heroSrc}" target="_blank" rel="noopener">Unsplash</a></div>
 
     <div class="wrap">
-      <h1 class="title">#5 Las Vegas, NV — Trick-or-Treat Safety</h1>
-      <p class="subtitle">Final Risk Score</p>
+      <h1 class="title">#${CITY.rankOverall} — ${CITY.name}, ${CITY.state} — Trick-or-Treat Safety</h1>
+      <p class="sub">We convert the city’s Index score into a <strong>Halloween Safety Level (%)</strong>. Typical U.S. city ≈ <strong>35%</strong>.</p>
 
-      <div class="scorebar">
-        <div class="rank">Safest</div>
-        <div class="bar" style="--p:22"><i></i></div>
-        <div class="score">22.0 <small>(Rank #5 Safest)</small></div>
+      <div class="badges">
+        <span class="badge accent">${band.txt} Risk</span>
+        <span class="badge warn">Risk: ${riskPct}%</span>
+        <span class="badge">Safety: ${safetyPct}%</span>
       </div>
 
-      <div class="labelM" style="margin-bottom:6px;">Key Metrics</div>
+      <div class="grid" title="Implied odds • Moneyline: ${moneyline} • Decimal: ${decimal}">
+        <div class="labelL">Risk %</div>
+        <div class="bar" style="--w:${riskPct}%"><i></i></div>
+        <div class="num">${riskPct}<small>%</small></div>
+      </div>
+      <p class="note">Bars display actual percent, with a small visual floor so all remain visible.</p>
 
-      <div class="metrics">
+      <div class="labelM">Key Metrics (raw values)</div>
+      <div class="metrics" role="list">
+
         <!-- Violent Crime -->
-        <div class="chip" aria-label="Violent crime rate per 100,000">
+        <div class="chip" role="listitem" aria-label="Violent crime rate per 100,000">
           <div class="icon" aria-hidden="true">
-            <!-- Police badge -->
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2 15 4l5 2-1 6-4 8-3 2-3-2-4-8-1-6 5-2z"/>
-              <circle cx="12" cy="11" r="2"/>
+              <path d="M12 2 15 4l5 2-1 6-4 8-3 2-3-2-4-8-1-6 5-2z"/><circle cx="12" cy="11" r="2"/>
             </svg>
           </div>
           <div>
-            <div class="labelM">Violent Crime</div>
-            <div class="value">430 / 100k</div>
+            <div class="k">Violent Crime</div>
+            <div class="v">${CITY.violentPer100k.toLocaleString()} / 100k</div>
           </div>
         </div>
 
         <!-- Property Crime -->
-        <div class="chip" aria-label="Property crime rate per 100,000">
+        <div class="chip" role="listitem" aria-label="Property crime rate per 100,000">
           <div class="icon" aria-hidden="true">
-            <!-- House -->
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 11l8-6 8 6v9a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1v-9z"/>
             </svg>
           </div>
           <div>
-            <div class="labelM">Property Crime</div>
-            <div class="value">2,623 / 100k</div>
+            <div class="k">Property Crime</div>
+            <div class="v">${CITY.propertyPer100k.toLocaleString()} / 100k</div>
           </div>
         </div>
 
         <!-- Pedestrian Fatalities -->
-        <div class="chip" aria-label="Pedestrian fatalities per 100,000">
+        <div class="chip" role="listitem" aria-label="Pedestrian fatalities per 100,000">
           <div class="icon" aria-hidden="true">
-            <!-- Person -->
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="8" r="4"/>
-              <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+              <circle cx="12" cy="4" r="2"/>
+              <path d="M12 6l2 4 3 1-2 6M12 12l-3 6M8 20h8"/>
             </svg>
           </div>
           <div>
-            <div class="labelM">Pedestrian Fatalities</div>
-            <div class="value">0.7 / 100k</div>
+            <div class="k">Pedestrian Fatalities</div>
+            <div class="v">${CITY.pedDeathsPer100k.toFixed(1)} / 100k</div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </article>
+`;
+
+// Apply theme dynamically
+document.documentElement.classList.add(band.theme);
+</script>
 </body>
 </html>
+
