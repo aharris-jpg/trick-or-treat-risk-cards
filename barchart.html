@@ -167,7 +167,7 @@ const subtitleEl=document.getElementById('subtitle');
 const VIEWS={
   // Implied probability (higher → more dangerous)
   "v-risk":{
-    labelTitle:"Implied Probability of Halloween Incidents (%) — Most Dangerous Cities",
+    labelTitle:"Most Dangerous Cities - Implied Probability of Halloween Incidents (%)",
     labelSub:"Bars are relative within this list (√-scaled). Labels show actual implied probabilities (typical city ≈ 35%).",
     palette:PUMPKIN, hex:HEX_PUMPKIN,
     dataset:()=>[...RISKEST].sort((a,b)=>scoreToRiskPct(b[2]) - scoreToRiskPct(a[2])),
@@ -177,7 +177,7 @@ const VIEWS={
   },
   // Implied probability (lower → safer; invert bars)
   "v-safe":{
-    labelTitle:"Implied Probability of Halloween Incidents (%) — Safest Cities (lower is better)",
+    labelTitle:"Safest Cities (lower is better) - Implied Probability of Halloween Incidents (%)",
     labelSub:"Bars are relative within this list (√-scaled). Lower implied % gets a longer bar; labels show actual probabilities.",
     palette:MINT, hex:HEX_MINT,
     dataset:()=>[...SAFEST].sort((a,b)=>scoreToRiskPct(a[2]) - scoreToRiskPct(b[2])),
