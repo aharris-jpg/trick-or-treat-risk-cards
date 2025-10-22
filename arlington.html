@@ -1,4 +1,4 @@
-<!doctype html>
+   <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -37,57 +37,51 @@
   .credit a{color:#8A94A3;text-decoration:none;border-bottom:1px dotted currentColor}
 
   .wrap{padding:12px}
-
-  /* ===== Title + badges ===== */
   .title{margin:0 0 2px;font-weight:850;font-size:16px}
-  .sub{margin:0 0 10px;color:#6B7480;font-size:12px}
+  .sub{margin:0 0 10px;color:var(--muted);font-size:12px}
   .badges{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
   .badge{font-size:11px;font-weight:800;color:#0F1115;background:#F4F6FA;border:1px solid var(--line);border-radius:999px;padding:4px 8px}
-  .badge.accent{background:#E7FFF4;border-color:#C8F5E1;color:#0E3B29}
+  .badge.accent{background:#ECFFF6;border-color:#C8F4E1;color:#01381F}
+  .badge.warn{background:#FFF9EE;border-color:#FDEBC7;color:#4C3201}
 
-  /* ===== Risk bar ===== */
-  .grid{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;margin:6px 0 2px}
+  .grid{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;margin:6px 0 4px}
   .labelL{font-size:12px;color:var(--muted)}
   .bar{height:10px;background:#EFF2F7;border:1px solid var(--line);border-radius:999px;position:relative;overflow:hidden}
-  .bar i{position:absolute;inset:0 auto 0 0;width:var(--w,0);min-width:var(--minbar);border-radius:inherit;
-         background:linear-gradient(90deg,#2DCB84,#FFB648 55%,#E23B2E)}
+  .bar i{position:absolute;inset:0 auto 0 0;width:var(--w,0);min-width:var(--minbar);border-radius:inherit;background:linear-gradient(90deg,#2DCB84 0%,#FFB648 55%,#E23B2E 100%);box-shadow:0 0 6px rgba(255,182,72,.28)}
   .num{font-size:22px;font-weight:900}
   .num small{font-size:11px;color:#6B7480;font-weight:700}
-
   .note{margin:2px 0 10px;color:#6B7480;font-size:11px}
 
-  /* ===== Metric chips ===== */
   .labelM{font-size:10px;letter-spacing:.28px;text-transform:uppercase;color:#6B7480;margin-bottom:6px}
   .metrics{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
-  .metrics::-webkit-scrollbar{height:6px}.metrics::-webkit-scrollbar-thumb{background:#D7DDE7;border-radius:999px}
+  .metrics::-webkit-scrollbar{height:6px}
+  .metrics::-webkit-scrollbar-thumb{background:#D7DDE7;border-radius:999px}
   .chip{flex:0 0 170px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:flex;gap:8px;align-items:center}
   .icon{width:28px;height:28px;border-radius:50%;background:#F1F3F8;display:grid;place-items:center}
   .icon svg{width:18px;height:18px}
   .chip .k{font-size:11px;color:#6B7480}
   .chip .v{font-size:15px;font-weight:900}
-  .chip:nth-child(1) .icon{color:#E23B2E} /* Violent */
-  .chip:nth-child(2) .icon{color:#FFB648} /* Property */
-  .chip:nth-child(3) .icon{color:#9061F9} /* Ped */
-  .chip:nth-child(4) .icon{color:#5B8CFF} /* DUI */
+  .chip:nth-child(1) .icon{color:#2DCB84}
+  .chip:nth-child(2) .icon{color:#FFB648}
+  .chip:nth-child(3) .icon{color:#E23B2E}
 </style>
 </head>
 <body>
   <div id="app"></div>
 
 <script>
-/* ================== INPUT (Arlington) ================== */
 const CITY = {
-  name: "Arlington", state: "TX", rankSafe: 1,
-  indexScore: 10.52,                 // Index 0–100 (lower is safer)
-  violentPer100k: 482.94,
-  propertyPer100k: 2412.72,
-  pedDeathsPer100k: 1.50,
-  duiPer1kDrivers: 1.03,
+  name: "Arlington", state: "TX", rankOverall: 1,
+  indexScore: 10.0,
+  violentPer100k: 319,
+  propertyPer100k: 2347,
+  pedDeathsPer100k: 0.9,
   heroSrc: "https://images.unsplash.com/photo-1628630470617-01127f28a1f6?auto=format&fit=crop&q=80&w=1738"
 };
 
-/* ===== Helpers: score → implied %; band; simple odds ===== */
-const scoreToRiskPct = s => Math.round(Math.max(0, Math.min(100, s * 0.7))); // Index 50 ≈ 35%
+const scoreToRiskPct = s => Math.round(Math.max(0, Math.min(100, s * 0.7)));
+const fmtOdds = pct => pct > 0 ? (100 / pct).toFixed(1).replace(/\.0$/,'') : "—";
+
 function riskBand(p){
   if(p >= 45) return {txt:"Very High", theme:"theme-danger"};
   if(p >= 38) return {txt:"High", theme:"theme-elevated"};
@@ -95,94 +89,48 @@ function riskBand(p){
   return {txt:"Low", theme:"theme-low"};
 }
 
-/* ===== Compute ===== */
-const riskPct = scoreToRiskPct(CITY.indexScore);      // ≈ 7% for Arlington
-const band = riskBand(riskPct);                        // Low
-const oddsOneIn = Math.max(2, Math.round(100 / Math.max(1, riskPct))); // ≈ 1 in 14
+const riskPct = scoreToRiskPct(CITY.indexScore);
+const band = riskBand(riskPct);
+const odds = fmtOdds(riskPct);
 
-/* ===== Render ===== */
-const el = document.getElementById("app");
-el.innerHTML = `
-  <article class="card ${band.theme}" role="group" aria-label="Trick-or-Treat risk card — ${CITY.name}, ${CITY.state}">
-    <div class="hero" role="img" aria-label="${CITY.name} neighborhood at dusk" style="background-image:url('${CITY.heroSrc}')"></div>
+document.getElementById("app").innerHTML = `
+  <article class="card ${band.theme}">
+    <div class="hero" style="background-image:url('${CITY.heroSrc}')"></div>
     <div class="credit">Photo: <a href="${CITY.heroSrc}" target="_blank" rel="noopener">Unsplash</a></div>
-
     <div class="wrap">
-      <h1 class="title">#${CITY.rankSafe} Safest — ${CITY.name}, ${CITY.state}</h1>
-      <p class="sub">Each city’s Index score is converted into an <strong>implied Halloween risk (%)</strong>. A typical U.S. city is around <strong>35%</strong>.</p>
+      <h1 class="title">#${CITY.rankOverall} — ${CITY.name}, ${CITY.state} — Trick-or-Treat Risk</h1>
+      <p class="sub">We convert the city’s Index score into an <strong>implied Halloween risk (%)</strong>. The typical U.S. city sits around <strong>35%</strong>.</p>
 
       <div class="badges">
         <span class="badge accent">${band.txt} Risk</span>
-        <span class="badge">Implied Risk: ${riskPct}%</span>
-        <span class="badge">≈ 1 in ${oddsOneIn} chance of an incident</span>
+        <span class="badge warn">Implied Risk: ${riskPct}%</span>
+        <span class="badge">≈ 1 in ${odds} chance of an incident</span>
       </div>
 
-      <div class="grid" title="Implied probability of Halloween incidents">
+      <div class="grid">
         <div class="labelL">Implied Risk (%)</div>
-        <div class="bar" style="--w:${Math.max(riskPct, parseInt(getComputedStyle(document.documentElement).getPropertyValue('--minbar')))}%">
-          <i></i>
-        </div>
+        <div class="bar" style="--w:${riskPct}%"><i></i></div>
         <div class="num">${riskPct}<small>%</small></div>
       </div>
-      <p class="note">Bars show the actual implied percent.</p>
+      <p class="note">Bars show the actual percent.</p>
 
       <div class="labelM">Key Metrics (raw values)</div>
-      <div class="metrics" role="list">
-        <div class="chip" role="listitem" aria-label="Violent crime rate per 100,000">
-          <div class="icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2 15 4l5 2-1 6-4 8-3 2-3-2-4-8-1-6 5-2z"/><circle cx="12" cy="11" r="2"/>
-            </svg>
-          </div>
-          <div>
-            <div class="k">Violent Crime</div>
-            <div class="v">${Math.round(CITY.violentPer100k).toLocaleString()} / 100k</div>
-          </div>
-        </div>
+      <div class="metrics">
+        <div class="chip"><div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 15 4l5 2-1 6-4 8-3 2-3-2-4-8-1-6 5-2z"/><circle cx="12" cy="11" r="2"/></svg>
+        </div><div><div class="k">Violent Crime</div><div class="v">${CITY.violentPer100k} / 100k</div></div></div>
 
-        <div class="chip" role="listitem" aria-label="Property crime rate per 100,000">
-          <div class="icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 11l8-6 8 6v9a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1v-9z"/>
-            </svg>
-          </div>
-          <div>
-            <div class="k">Property Crime</div>
-            <div class="v">${Math.round(CITY.propertyPer100k).toLocaleString()} / 100k</div>
-          </div>
-        </div>
+        <div class="chip"><div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-6 8 6v9a1 1 0 0 1-1 1h-4v-5H9v5H5a1 1 0 0 1-1-1v-9z"/></svg>
+        </div><div><div class="k">Property Crime</div><div class="v">${CITY.propertyPer100k} / 100k</div></div></div>
 
-        <div class="chip" role="listitem" aria-label="Pedestrian fatalities per 100,000">
-          <div class="icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M14 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
-              <path d="M6 22l3-7 2-3 3 2 1 8M2 12l5 1 3-1"/>
-            </svg>
-          </div>
-          <div>
-            <div class="k">Ped Fatalities</div>
-            <div class="v">${CITY.pedDeathsPer100k.toFixed(2)} / 100k</div>
-          </div>
-        </div>
-
-        <div class="chip" role="listitem" aria-label="DUI rate per 1,000 drivers">
-          <div class="icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.2"/><path d="M12 3v6M3 12h6M21 12h-6M12 21v-6"/>
-            </svg>
-          </div>
-          <div>
-            <div class="k">DUI Rate</div>
-            <div class="v">${CITY.duiPer1kDrivers.toFixed(2)} / 1,000</div>
-          </div>
-        </div>
+        <div class="chip"><div class="icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M12 6l2 4 3 1-2 6M12 12l-3 6M8 20h8"/></svg>
+        </div><div><div class="k">Pedestrian Fatalities</div><div class="v">${CITY.pedDeathsPer100k} / 100k</div></div></div>
       </div>
     </div>
   </article>
 `;
-
-// Apply theme class (low risk → green accent)
-document.documentElement.classList.add(band.theme);
 </script>
 </body>
 </html>
