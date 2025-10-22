@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Las Vegas, NV — Trick-or-Treat Safety (Compact)</title>
+<title>Las Vegas, NV — Trick-or-Treat Risk (Compact)</title>
 <style>
   /* ===== Unified Compact Card Theme ===== */
   :root{
@@ -107,6 +107,7 @@ const CITY = {
 const scoreToRiskPct = s => Math.round(Math.max(0, Math.min(100, s * 0.7))); // Index 50 ≈ 35%
 const pctToMoneyline = pct => { const p=pct/100; if(p<=0||p>=1)return"—"; return p>=0.5?(-Math.round((p/(1-p))*100)).toString():`+${Math.round(((1-p)/p)*100)}`; };
 const pctToDecimal = pct => { const p=pct/100; return p<=0?"—":(1/p).toFixed(2); };
+const oneInText = pct => pct<=0 ? "—" : (Math.round((100/pct)*10)/10).toFixed(1); // 15% -> 6.7
 
 function riskBand(p){
   if(p >= 45) return {txt:"Very High", theme:"theme-danger"};
@@ -117,30 +118,30 @@ function riskBand(p){
 
 /* ===== Compute ===== */
 const riskPct = scoreToRiskPct(CITY.indexScore);
-const safetyPct = Math.max(0, 100 - riskPct);
 const band = riskBand(riskPct);
 const moneyline = pctToMoneyline(riskPct);
 const decimal = pctToDecimal(riskPct);
+const oneIn = oneInText(riskPct);
 
 /* ===== Render ===== */
 const app = document.getElementById("app");
 app.innerHTML = `
-  <article class="card ${band.theme}" role="group" aria-label="Trick-or-Treat safety card — ${CITY.name}, ${CITY.state}">
+  <article class="card ${band.theme}" role="group" aria-label="Trick-or-Treat risk card — ${CITY.name}, ${CITY.state}">
     <div class="hero" role="img" aria-label="${CITY.name} suburbs at night" style="background-image:url('${CITY.heroSrc}')"></div>
     <div class="credit">Photo: <a href="${CITY.heroSrc}" target="_blank" rel="noopener">Unsplash</a></div>
 
     <div class="wrap">
-      <h1 class="title">#${CITY.rankOverall} — ${CITY.name}, ${CITY.state} — Trick-or-Treat Safety</h1>
-      <p class="sub">We convert the city’s Index score into a <strong>Halloween Safety Level (%)</strong>. Typical U.S. city ≈ <strong>35%</strong>.</p>
+      <h1 class="title">#${CITY.rankOverall} — ${CITY.name}, ${CITY.state} — Trick-or-Treat Risk</h1>
+      <p class="sub">We convert the city’s Index score into an <strong>implied Halloween risk (%)</strong>. Typical U.S. city ≈ <strong>35%</strong>.</p>
 
       <div class="badges">
         <span class="badge accent">${band.txt} Risk</span>
-        <span class="badge warn">Risk: ${riskPct}%</span>
-        <span class="badge">Safety: ${safetyPct}%</span>
+        <span class="badge warn">Implied Risk: ${riskPct}%</span>
+        <span class="badge">≈ 1 in ${oneIn} chance of an incident</span>
       </div>
 
       <div class="grid" title="Implied odds • Moneyline: ${moneyline} • Decimal: ${decimal}">
-        <div class="labelL">Risk %</div>
+        <div class="labelL">Implied Risk (%)</div>
         <div class="bar" style="--w:${riskPct}%"><i></i></div>
         <div class="num">${riskPct}<small>%</small></div>
       </div>
@@ -198,4 +199,3 @@ document.documentElement.classList.add(band.theme);
 </script>
 </body>
 </html>
-
