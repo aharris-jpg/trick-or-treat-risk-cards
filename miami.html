@@ -95,7 +95,7 @@
 <script>
 /* ================== INPUT (Miami) ================== */
 const CITY = {
-  name: "Miami", state: "FL", rankOverall: "—",
+  name: "Miami", state: "FL", rankOverall: 3,
   indexScore: 35.0,
   violentPer100k: 473,
   propertyPer100k: 2995,
@@ -127,7 +127,7 @@ app.innerHTML = `
     <div class="credit">Photo: <a href="${CITY.heroSrc}" target="_blank" rel="noopener">Unsplash</a></div>
 
     <div class="wrap">
-      <h1 class="title">${CITY.name}, ${CITY.state} — Trick-or-Treat Risk</h1>
+      <h1 class="title">#${CITY.rankOverall} — ${CITY.name}, ${CITY.state} — Trick-or-Treat Risk</h1>
       <p class="sub">We convert the city’s Index score into an <strong>implied Halloween risk (%)</strong>. The typical U.S. city sits around <strong>35%</strong>.</p>
 
       <div class="badges">
